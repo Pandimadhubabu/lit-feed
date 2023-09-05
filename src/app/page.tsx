@@ -1,31 +1,25 @@
 'use client';
-import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, Menu, Transition } from '@headlessui/react';
+import { Bars3Icon, ChevronRightIcon, ChevronUpDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import {
-  ChartBarSquareIcon,
   Cog6ToothIcon,
-  FolderIcon,
-  GlobeAltIcon,
-  ServerIcon,
-  SignalIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { Bars3Icon, ChevronRightIcon, ChevronUpDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import { classNames } from './utils';
+  Square3Stack3DIcon,
+  StarIcon,
+  XMarkIcon
+} from '@heroicons/react/24/outline';
+import { Fragment, useState } from 'react';
 import { Sidebar } from './components/Sidebar';
+import { classNames } from './utils';
 
 const navigation = [
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Deployments', href: '#', icon: ServerIcon, current: true },
-  { name: 'Activity', href: '#', icon: SignalIcon, current: false },
-  { name: 'Domains', href: '#', icon: GlobeAltIcon, current: false },
-  { name: 'Usage', href: '#', icon: ChartBarSquareIcon, current: false },
+  { name: 'Saved', href: '#', icon: StarIcon, current: false },
   { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
+  { name: 'All Feeds', href: '#', icon: Square3Stack3DIcon, current: true },
 ]
-const teams = [
-  { id: 1, name: 'Planetaria', href: '#', initial: 'P', current: false },
-  { id: 2, name: 'Protocol', href: '#', initial: 'P', current: false },
-  { id: 3, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
+const feeds = [
+  { id: 1, name: 'Stackoverflow Blog', href: '#', initial: 'S', current: false },
+  { id: 2, name: 'Hacker News', href: '#', initial: 'H', current: false },
+  { id: 3, name: 'Martin Fowler', href: '#', initial: 'M', current: false },
 ]
 const statuses = {
   offline: 'text-gray-500 bg-gray-100/10',
@@ -117,7 +111,7 @@ export default function Home() {
                   </div>
                 </Transition.Child>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
-                <Sidebar teams={teams} navigation={navigation} />
+                <Sidebar feeds={feeds} navigation={navigation} />
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -127,7 +121,7 @@ export default function Home() {
       {/* Static sidebar for desktop */}
       <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <Sidebar teams={teams} navigation={navigation} />
+        <Sidebar feeds={feeds} navigation={navigation} />
       </div>
 
       <div className="xl:pl-72">
