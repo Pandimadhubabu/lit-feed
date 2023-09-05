@@ -48,18 +48,18 @@ const deployments = [
   environment: keyof typeof environments
   [key: string]: string | number
 }[]
-const activityItems = [
+const articles = [
   {
-    user: {
-      name: 'Michael Foster',
+    title: {
+      name: 'Can LLMs learn from a single example?',
       imageUrl:
         'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     },
-    projectName: 'ios-app',
-    commit: '2d89f0c8',
-    branch: 'main',
+    description: `I've been working on a new approach to few-shot learning, and I'm excited to share some results.`,
+    link: 'https://www.fast.ai/posts/2023-09-04-learning-jumps/',
+    feedName: 'Hacker News',
     date: '1h',
-    dateTime: '2023-01-23T11:00',
+    dateTime: 'Wed, 6 Sep 2023 00:40:05 +0000',
   },
   // More items...
 ]
@@ -156,8 +156,28 @@ export default function Home() {
 
         <main className="lg:pr-96">
           <header className="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-            <h1 className="text-base font-semibold leading-7 text-white">Deployments</h1>
+            <h1 className="text-base font-semibold leading-7 text-white">{articles[0].title.name}</h1>
+          </header>
 
+          {/* Deployment list */}
+          <div className="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
+            <div className="min-w-0 flex-auto">
+              <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
+                <p className="truncate">description</p>
+                <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 flex-none fill-gray-300">
+                  <circle cx={1} cy={1} r={1} />
+                </svg>
+                <p className="whitespace-nowrap">status</p>
+              </div>
+            </div>
+            <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+          </div>
+        </main>
+
+        {/* Activity feed */}
+        <aside className="bg-black/10 lg:fixed lg:bottom-0 lg:right-0 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5">
+          <header className="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+            <h2 className="text-base font-semibold leading-7 text-white">All feeds</h2>
             {/* Sort dropdown */}
             <Menu as="div" className="relative">
               <Menu.Button className="flex items-center gap-x-1 text-sm font-medium leading-6 text-white">
@@ -183,7 +203,7 @@ export default function Home() {
                           'block px-3 py-1 text-sm leading-6 text-gray-900'
                         )}
                       >
-                        Name
+                        Most recent first
                       </a>
                     )}
                   </Menu.Item>
@@ -196,7 +216,7 @@ export default function Home() {
                           'block px-3 py-1 text-sm leading-6 text-gray-900'
                         )}
                       >
-                        Date updated
+                        Most popular first
                       </a>
                     )}
                   </Menu.Item>
@@ -209,7 +229,7 @@ export default function Home() {
                           'block px-3 py-1 text-sm leading-6 text-gray-900'
                         )}
                       >
-                        Environment
+                        Things I might like
                       </a>
                     )}
                   </Menu.Item>
@@ -217,69 +237,20 @@ export default function Home() {
               </Transition>
             </Menu>
           </header>
-
-          {/* Deployment list */}
           <ul role="list" className="divide-y divide-white/5">
-            {deployments.map((deployment) => (
-              <li key={deployment.id} className="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
-                <div className="min-w-0 flex-auto">
-                  <div className="flex items-center gap-x-3">
-                    <div className={classNames(statuses[deployment.status], 'flex-none rounded-full p-1')}>
-                      <div className="h-2 w-2 rounded-full bg-current" />
-                    </div>
-                    <h2 className="min-w-0 text-sm font-semibold leading-6 text-white">
-                      <a href={deployment.href} className="flex gap-x-2">
-                        <span className="truncate">{deployment.teamName}</span>
-                        <span className="text-gray-400">/</span>
-                        <span className="whitespace-nowrap">{deployment.projectName}</span>
-                        <span className="absolute inset-0" />
-                      </a>
-                    </h2>
-                  </div>
-                  <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
-                    <p className="truncate">{deployment.description}</p>
-                    <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 flex-none fill-gray-300">
-                      <circle cx={1} cy={1} r={1} />
-                    </svg>
-                    <p className="whitespace-nowrap">{deployment.statusText}</p>
-                  </div>
-                </div>
-                <div
-                  className={classNames(
-                    environments[deployment.environment],
-                    'rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset'
-                  )}
-                >
-                  {deployment.environment}
-                </div>
-                <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-              </li>
-            ))}
-          </ul>
-        </main>
-
-        {/* Activity feed */}
-        <aside className="bg-black/10 lg:fixed lg:bottom-0 lg:right-0 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5">
-          <header className="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-            <h2 className="text-base font-semibold leading-7 text-white">Activity feed</h2>
-            <a href="#" className="text-sm font-semibold leading-6 text-indigo-400">
-              View all
-            </a>
-          </header>
-          <ul role="list" className="divide-y divide-white/5">
-            {activityItems.map((item) => (
-              <li key={item.commit} className="px-4 py-4 sm:px-6 lg:px-8">
+            {articles.map((item) => (
+              <li key={item.link} className="px-4 py-4 sm:px-6 lg:px-8">
                 <div className="flex items-center gap-x-3">
-                  <img src={item.user.imageUrl} alt="" className="h-6 w-6 flex-none rounded-full bg-gray-800" />
-                  <h3 className="flex-auto truncate text-sm font-semibold leading-6 text-white">{item.user.name}</h3>
+                  <h3 className="flex-auto truncate text-sm font-semibold leading-6 text-white">{item.title.name}</h3>
+                  <p id="description" className="flex-auto truncate text-xs text-gray-400">
+                    {item.description}
+                  </p>
                   <time dateTime={item.dateTime} className="flex-none text-xs text-gray-600">
                     {item.date}
                   </time>
                 </div>
                 <p className="mt-3 truncate text-sm text-gray-500">
-                  Pushed to <span className="text-gray-400">{item.projectName}</span> (
-                  <span className="font-mono text-gray-400">{item.commit}</span> on{' '}
-                  <span className="text-gray-400">{item.branch}</span>)
+                  Published on <span className="text-gray-400">{item.feedName}</span>
                 </p>
               </li>
             ))}
