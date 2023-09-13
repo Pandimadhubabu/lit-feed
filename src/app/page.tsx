@@ -106,7 +106,7 @@ export default function Home() {
                   <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
                     <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
                       <span className="sr-only">Close sidebar</span>
-                      <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                      <XMarkIcon className="h-6 w-6 dark:text-white text-black" aria-hidden="true" />
                     </button>
                   </div>
                 </Transition.Child>
@@ -127,7 +127,7 @@ export default function Home() {
       <div className="xl:pl-72">
         {/* Sticky search header */}
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-white/5 bg-gray-900 px-4 shadow-sm sm:px-6 lg:px-8">
-          <button type="button" className="-m-2.5 p-2.5 text-white xl:hidden" onClick={() => setSidebarOpen(true)}>
+          <button type="button" className="-m-2.5 p-2.5 dark:text-white text-black xl:hidden" onClick={() => setSidebarOpen(true)}>
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-5 w-5" aria-hidden="true" />
           </button>
@@ -139,12 +139,12 @@ export default function Home() {
               </label>
               <div className="relative w-full">
                 <MagnifyingGlassIcon
-                  className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-500"
+                  className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 dark:text-gray-500 text-gray-800"
                   aria-hidden="true"
                 />
                 <input
                   id="search-field"
-                  className="block h-full w-full border-0 bg-transparent py-0 pl-8 pr-0 text-white focus:ring-0 sm:text-sm"
+                  className="block h-full w-full border-0 bg-transparent py-0 pl-8 pr-0 dark:text-white text-black focus:ring-0 sm:text-sm"
                   placeholder="Search..."
                   type="search"
                   name="search"
@@ -156,13 +156,13 @@ export default function Home() {
 
         <main className="lg:pr-96">
           <header className="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-            <h1 className="text-base font-semibold leading-7 text-white">{articles[0].title.name}</h1>
+            <h1 className="text-base font-semibold leading-7 dark:text-white text-black">{articles[0].title.name}</h1>
           </header>
 
           {/* Deployment list */}
           <div className="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
             <div className="min-w-0 flex-auto">
-              <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
+              <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 dark:text-gray-400 text-gray-800">
                 <p className="truncate">description</p>
                 <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 flex-none fill-gray-300">
                   <circle cx={1} cy={1} r={1} />
@@ -170,19 +170,19 @@ export default function Home() {
                 <p className="whitespace-nowrap">status</p>
               </div>
             </div>
-            <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+            <ChevronRightIcon className="h-5 w-5 flex-none dark:text-gray-400 text-gray-800" aria-hidden="true" />
           </div>
         </main>
 
         {/* Activity feed */}
         <aside className="bg-black/10 lg:fixed lg:bottom-0 lg:right-0 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5">
           <header className="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-            <h2 className="text-base font-semibold leading-7 text-white">All feeds</h2>
+            <h2 className="text-base font-semibold leading-7 dark:text-white text-black">All feeds</h2>
             {/* Sort dropdown */}
             <Menu as="div" className="relative">
-              <Menu.Button className="flex items-center gap-x-1 text-sm font-medium leading-6 text-white">
+              <Menu.Button className="flex items-center gap-x-1 text-sm font-medium leading-6 dark:text-white text-black">
                 Sort by
-                <ChevronUpDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
+                <ChevronUpDownIcon className="h-5 w-5 dark:text-gray-500 text-gray-800" aria-hidden="true" />
               </Menu.Button>
               <Transition
                 as={Fragment}
@@ -200,7 +200,7 @@ export default function Home() {
                         href="#"
                         className={classNames(
                           active ? 'bg-gray-50' : '',
-                          'block px-3 py-1 text-sm leading-6 text-gray-900'
+                          'block px-3 py-1 text-sm leading-6 dark:text-gray-900 text-gray-400'
                         )}
                       >
                         Most recent first
@@ -213,7 +213,7 @@ export default function Home() {
                         href="#"
                         className={classNames(
                           active ? 'bg-gray-50' : '',
-                          'block px-3 py-1 text-sm leading-6 text-gray-900'
+                          'block px-3 py-1 text-sm leading-6 dark:text-gray-900 text-gray-400'
                         )}
                       >
                         Most popular first
@@ -226,7 +226,7 @@ export default function Home() {
                         href="#"
                         className={classNames(
                           active ? 'bg-gray-50' : '',
-                          'block px-3 py-1 text-sm leading-6 text-gray-900'
+                          'block px-3 py-1 text-sm leading-6 dark:text-gray-900 text-gray-400'
                         )}
                       >
                         Things I might like
@@ -241,16 +241,16 @@ export default function Home() {
             {articles.map((item) => (
               <li key={item.link} className="px-4 py-4 sm:px-6 lg:px-8">
                 <div className="flex items-center gap-x-3">
-                  <h3 className="flex-auto truncate text-sm font-semibold leading-6 text-white">{item.title.name}</h3>
-                  <p id="description" className="flex-auto truncate text-xs text-gray-400">
+                  <h3 className="flex-auto truncate text-sm font-semibold leading-6 dark:text-white text-black">{item.title.name}</h3>
+                  <p id="description" className="flex-auto truncate text-xs dark:text-gray-400 text-gray-800">
                     {item.description}
                   </p>
-                  <time dateTime={item.dateTime} className="flex-none text-xs text-gray-600">
+                  <time dateTime={item.dateTime} className="flex-none text-xs dark:text-gray-600 text-gray-900">
                     {item.date}
                   </time>
                 </div>
-                <p className="mt-3 truncate text-sm text-gray-500">
-                  Published on <span className="text-gray-400">{item.feedName}</span>
+                <p className="mt-3 truncate text-sm dark:text-gray-500 text-gray-800">
+                  Published on <span className="dark:text-gray-400 text-gray-800">{item.feedName}</span>
                 </p>
               </li>
             ))}
