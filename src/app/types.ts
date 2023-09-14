@@ -27,3 +27,15 @@ export type NavigationItem = {
   } & RefAttributes<SVGSVGElement>>;
   current: boolean;
 }
+
+export type Article = {
+  title: {
+    name: string;
+    imageUrl: string;
+  };
+  description: string;
+  link: string;
+  feedName: string;
+  date: string;
+  dateTime: string;
+}

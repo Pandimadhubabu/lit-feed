@@ -10,6 +10,7 @@ import {
 import { Fragment, useState } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { classNames } from './utils';
+import { Article } from './components/Article';
 
 const navigation = [
   { name: 'Saved', href: '#', icon: StarIcon, current: false },
@@ -66,6 +67,8 @@ const articles = [
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [articleOpen, setArticleOpen] = useState(false)
+  const [selectedArticle, setSelectedArticle] = useState(0)
 
   return (
     <div>
@@ -106,12 +109,61 @@ export default function Home() {
                   <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
                     <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
                       <span className="sr-only">Close sidebar</span>
-                      <XMarkIcon className="h-6 w-6 dark:text-white text-black" aria-hidden="true" />
+                      <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                     </button>
                   </div>
                 </Transition.Child>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <Sidebar feeds={feeds} navigation={navigation} />
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition.Root>
+
+      <Transition.Root show={articleOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-50 lg:hidden" onClose={setArticleOpen}>
+          <Transition.Child
+            as={Fragment}
+            enter="transition-opacity ease-linear duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity ease-linear duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-900/80" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 flex">
+            <Transition.Child
+              as={Fragment}
+              enter="transition ease-in-out duration-300 transform"
+              enterFrom="-translate-x-full"
+              enterTo="translate-x-0"
+              leave="transition ease-in-out duration-300 transform"
+              leaveFrom="translate-x-0"
+              leaveTo="-translate-x-full"
+            >
+              <Dialog.Panel className="relative mr-16 flex w-full max-w-full flex-1">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-in-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in-out duration-300"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="absolute left-full top-0 flex justify-center pt-5">
+                    <button type="button" className="-m-2.5 p-2.5" onClick={() => setArticleOpen(false)}>
+                      <span className="sr-only">Close article</span>
+                      <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                    </button>
+                  </div>
+                </Transition.Child>
+                {/* Sidebar component, swap this element with another sidebar if you like */}
+                <Article article={articles[selectedArticle]} />
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -154,28 +206,8 @@ export default function Home() {
           </div>
         </div>
 
-        <main className="lg:pr-96">
-          <header className="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-            <h1 className="text-base font-semibold leading-7 dark:text-white text-black">{articles[0].title.name}</h1>
-          </header>
-
-          {/* Deployment list */}
-          <div className="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
-            <div className="min-w-0 flex-auto">
-              <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 dark:text-gray-400 text-gray-800">
-                <p className="truncate">description</p>
-                <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 flex-none fill-gray-300">
-                  <circle cx={1} cy={1} r={1} />
-                </svg>
-                <p className="whitespace-nowrap">status</p>
-              </div>
-            </div>
-            <ChevronRightIcon className="h-5 w-5 flex-none dark:text-gray-400 text-gray-800" aria-hidden="true" />
-          </div>
-        </main>
-
-        {/* Activity feed */}
-        <aside className="bg-black/10 lg:fixed lg:bottom-0 lg:right-0 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5">
+        {/* Feed list */}
+        <aside className="bg-gray-800 lg:fixed lg:bottom-0 lg:left-0 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5 xl:left-auto">
           <header className="flex items-center justify-between border-b border-white/5 px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
             <h2 className="text-base font-semibold leading-7 dark:text-white text-black">All feeds</h2>
             {/* Sort dropdown */}
@@ -238,25 +270,28 @@ export default function Home() {
             </Menu>
           </header>
           <ul role="list" className="divide-y divide-white/5">
-            {articles.map((item) => (
-              <li key={item.link} className="px-4 py-4 sm:px-6 lg:px-8">
-                <div className="flex items-center gap-x-3">
-                  <h3 className="flex-auto truncate text-sm font-semibold leading-6 dark:text-white text-black">{item.title.name}</h3>
-                  <p id="description" className="flex-auto truncate text-xs dark:text-gray-400 text-gray-800">
+            {articles.map((item, index) => (
+              <li key={item.link} className="px-4 py-4 sm:px-6 lg:px-8" onClick={() => { setArticleOpen(true); setSelectedArticle(index) }}>
+                <div className="flex items-center flex-col gap-x-3">
+                  <h3 className="flex-auto w-full truncate text-sm font-semibold leading-6 dark:text-white text-black">{item.title.name}</h3>
+                  <p id="description" className="flex-auto w-full truncate text-xs dark:text-gray-400 text-gray-800">
                     {item.description}
                   </p>
-                  <time dateTime={item.dateTime} className="flex-none text-xs dark:text-gray-600 text-gray-900">
-                    {item.date}
-                  </time>
                 </div>
                 <p className="mt-3 truncate text-sm dark:text-gray-500 text-gray-800">
                   Published on <span className="dark:text-gray-400 text-gray-800">{item.feedName}</span>
+                  <time dateTime={item.dateTime} className="flex-none text-xs m-2 dark:text-gray-600 text-gray-900">
+                    {item.date}
+                  </time>
                 </p>
               </li>
             ))}
           </ul>
         </aside>
-      </div>
-    </div>
+        <main className="hidden w-full h-full lg:block lg:fixed lg:left-96 xl:left-[42rem]">
+          <Article article={articles[selectedArticle]} />
+        </main>
+      </div >
+    </div >
   )
 }
