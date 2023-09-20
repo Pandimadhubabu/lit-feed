@@ -29,10 +29,7 @@ export type NavigationItem = {
 }
 
 export type Article = {
-  title: {
-    name: string;
-    imageUrl: string;
-  };
+  title: string;
   description: string;
   link: string;
   feedName: string;
