@@ -1,10 +1,15 @@
-import { NavigationItem, Feed } from "../types"
+import { useState } from "react"
+import { NavigationItem, Feed, User } from "../types"
 import { classNames } from "../utils"
 
-export function Sidebar({ navigation, feeds }: {
+export function Sidebar({ navigation, feeds, user }: {
   navigation: NavigationItem[]
   feeds: Feed[]
+  user?: User
 }) {
+  const [selectedFeed, setSelectedFeed] = useState(0)
+  const [selectedNavigation, setSelectedNavigation] = useState(0)
+
   return (
     <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 ring-1 ring-white/10">
       <div className="flex h-16 shrink-0 items-center">
@@ -44,12 +49,12 @@ export function Sidebar({ navigation, feeds }: {
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
           <li>
             <ul role="list" className="-mx-2 space-y-1">
-              {navigation.map((item) => (
+              {navigation.map((item, index) => (
                 <li key={item.name}>
                   <a
                     href={item.href}
                     className={classNames(
-                      item.current
+                      index === selectedNavigation
                         ? 'bg-gray-800 text-white'
                         : 'text-gray-400 hover:text-white hover:bg-gray-800',
                       'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
@@ -65,40 +70,50 @@ export function Sidebar({ navigation, feeds }: {
           <li>
             <div className="text-xs font-semibold leading-6 text-gray-400">Your feeds</div>
             <ul role="list" className="-mx-2 mt-2 space-y-1">
-              {feeds.map((team) => (
-                <li key={team.name}>
+              {feeds.map((feed, index) => (
+                <li key={feed.name}>
                   <a
-                    href={team.href}
+                    href={feed.link}
                     className={classNames(
-                      team.current
+                      index === selectedFeed
                         ? 'bg-gray-800 text-white'
                         : 'text-gray-400 hover:text-white hover:bg-gray-800',
                       'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                     )}
                   >
                     <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                      {team.initial}
+                      {feed.iconUrl ? (
+                        <img
+                          className="h-4 w-4"
+                          src={feed.iconUrl}
+                          alt=""
+                        />
+                      ) : (
+                        <></>
+                      )}
                     </span>
-                    <span className="truncate">{team.name}</span>
+                    <span className="truncate">{feed.name}</span>
                   </a>
                 </li>
               ))}
             </ul>
           </li>
-          <li className="-mx-6 mt-auto">
-            <a
-              href="#"
-              className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
-            >
-              <img
-                className="h-8 w-8 rounded-full bg-gray-800"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
-              <span className="sr-only">Your profile</span>
-              <span aria-hidden="true">Tom Cook</span>
-            </a>
-          </li>
+          {user ? (
+            <li className="-mx-6 mt-auto">
+              <a
+                href="#"
+                className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
+              >
+                <img
+                  className="h-8 w-8 rounded-full bg-gray-800"
+                  src={user.imageUrl}
+                  alt=""
+                />
+                <span className="sr-only">Your profile</span>
+                <span aria-hidden="true">{user.name}</span>
+              </a>
+            </li>
+          ) : <></>}
         </ul>
       </nav>
     </div>
