@@ -7,7 +7,7 @@ import {
   StarIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Article } from './components/Article';
 import { Sidebar } from './components/Sidebar';
 
