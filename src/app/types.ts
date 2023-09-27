@@ -31,7 +31,7 @@ export type Feed = {
   id: ID;
   name: Name;
   link: Href;
-  iconUrl: Href;
+  iconUrl?: Href;
 }
 
 export type Article = {
