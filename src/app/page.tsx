@@ -208,7 +208,7 @@ export default function Home() {
                 key={article.link}
                 className={
                   (selectedArticle === index
-                    ? "bg-gray-700"
+                    ? "dark:bg-gray-600 bg-gray-700"
                     : `${
                         index % 2 === 0
                           ? "dark:bg-gray-800 bg-gray-100"
