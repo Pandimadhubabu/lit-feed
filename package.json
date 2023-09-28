@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
@@ -27,6 +28,14 @@
   },
   "devDependencies": {
     "eslint-config-prettier": "^9.0.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
     "prettier": "^3.0.3"
+  },
+  "lint-staged": {
+    "*.{ts,css,md}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   }
 }
