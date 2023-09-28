@@ -1,40 +1,47 @@
-'use client';
-import { Dialog, Transition } from '@headlessui/react';
-import { Bars3Icon } from '@heroicons/react/20/solid';
+"use client";
+import { Dialog, Transition } from "@headlessui/react";
+import { Bars3Icon } from "@heroicons/react/20/solid";
 import {
   Cog6ToothIcon,
   Square3Stack3DIcon,
   StarIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline';
-import { Fragment, useEffect, useState } from 'react';
-import { Article } from './components/Article';
-import { Sidebar } from './components/Sidebar';
-import { useFeeds } from './hooks/useFeeds';
-import { useUser } from './hooks/useUser';
-import { useArticles } from './hooks/useArticles';
-import { Loading } from './components/Loading';
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { Fragment, useEffect, useState } from "react";
+import { Article } from "./components/Article";
+import { Sidebar } from "./components/Sidebar";
+import { useFeeds } from "./hooks/useFeeds";
+import { useUser } from "./hooks/useUser";
+import { useArticles } from "./hooks/useArticles";
+import { Loading } from "./components/Loading";
 
 const navigation = [
-  { name: 'Saved', href: '#', icon: StarIcon, current: false },
-  { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
-  { name: 'All Feeds', href: '#', icon: Square3Stack3DIcon, current: true },
-]
+  { name: "Saved", href: "#", icon: StarIcon, current: false },
+  { name: "Settings", href: "#", icon: Cog6ToothIcon, current: false },
+  { name: "All Feeds", href: "#", icon: Square3Stack3DIcon, current: true },
+];
 export default function Home() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [articleOpen, setArticleOpen] = useState(false)
-  const [selectedArticle, setSelectedArticle] = useState(0)
-  const [selectedFeed, setSelectedFeed] = useState(0)
-  const [selectedNavigation, setSelectedNavigation] = useState(0)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [articleOpen, setArticleOpen] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState(0);
+  const [selectedFeed, setSelectedFeed] = useState(0);
+  const [selectedNavigation, setSelectedNavigation] = useState(0);
 
-  const user = useUser()
-  const feeds = useFeeds({ userId: user?.id })
-  const articles = useArticles({ feedId: feeds[selectedFeed]?.id, userId: user?.id })
+  const user = useUser();
+  const feeds = useFeeds({ userId: user?.id });
+  const articles = useArticles({
+    feedId: feeds[selectedFeed]?.id,
+    userId: user?.id,
+  });
 
   return (
     <div>
       <Transition.Root show={sidebarOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50 xl:hidden" onClose={setSidebarOpen}>
+        <Dialog
+          as="div"
+          className="relative z-50 xl:hidden"
+          onClose={setSidebarOpen}
+        >
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -68,14 +75,29 @@ export default function Home() {
                   leaveTo="opacity-0"
                 >
                   <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                    <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
+                    <button
+                      type="button"
+                      className="-m-2.5 p-2.5"
+                      onClick={() => setSidebarOpen(false)}
+                    >
                       <span className="sr-only">Close sidebar</span>
-                      <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                      <XMarkIcon
+                        className="h-6 w-6 text-white"
+                        aria-hidden="true"
+                      />
                     </button>
                   </div>
                 </Transition.Child>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
-                <Sidebar navigation={navigation} selectedNavigation={selectedNavigation} onNavigationChange={setSelectedNavigation} feeds={feeds} selectedFeed={selectedFeed} onFeedChange={setSelectedFeed} user={user} />
+                <Sidebar
+                  navigation={navigation}
+                  selectedNavigation={selectedNavigation}
+                  onNavigationChange={setSelectedNavigation}
+                  feeds={feeds}
+                  selectedFeed={selectedFeed}
+                  onFeedChange={setSelectedFeed}
+                  user={user}
+                />
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -84,7 +106,11 @@ export default function Home() {
 
       {articles.length > 0 ? (
         <Transition.Root show={articleOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-50 lg:hidden" onClose={setArticleOpen}>
+          <Dialog
+            as="div"
+            className="relative z-50 lg:hidden"
+            onClose={setArticleOpen}
+          >
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -118,9 +144,16 @@ export default function Home() {
                     leaveTo="opacity-0"
                   >
                     <div className="absolute left-full top-0 flex justify-center pt-5">
-                      <button type="button" className="-m-2.5 p-2.5" onClick={() => setArticleOpen(false)}>
+                      <button
+                        type="button"
+                        className="-m-2.5 p-2.5"
+                        onClick={() => setArticleOpen(false)}
+                      >
                         <span className="sr-only">Close article</span>
-                        <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                        <XMarkIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
                       </button>
                     </div>
                   </Transition.Child>
@@ -131,24 +164,39 @@ export default function Home() {
             </div>
           </Dialog>
         </Transition.Root>
-      ) : <Loading />}
+      ) : (
+        <Loading />
+      )}
 
       {/* Static sidebar for desktop */}
       <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <Sidebar navigation={navigation} selectedNavigation={selectedNavigation} onNavigationChange={setSelectedNavigation} feeds={feeds} selectedFeed={selectedFeed} onFeedChange={setSelectedFeed} />
+        <Sidebar
+          navigation={navigation}
+          selectedNavigation={selectedNavigation}
+          onNavigationChange={setSelectedNavigation}
+          feeds={feeds}
+          selectedFeed={selectedFeed}
+          onFeedChange={setSelectedFeed}
+        />
       </div>
 
       <div className="xl:pl-72">
         {/* Sticky search header */}
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-white/5 bg-gray-900 px-4 shadow-sm sm:px-6 lg:px-8">
-          <button type="button" className="-m-2.5 p-2.5 text-white xl:hidden" onClick={() => setSidebarOpen(true)}>
+          <button
+            type="button"
+            className="-m-2.5 p-2.5 text-white xl:hidden"
+            onClick={() => setSidebarOpen(true)}
+          >
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-5 w-5" aria-hidden="true" />
           </button>
 
           <header className="flex items-center justify-between border-b border-white/5 w-full px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-            <h2 className="text-base font-semibold leading-7 text-white">All feeds</h2>
+            <h2 className="text-base font-semibold leading-7 text-white">
+              All feeds
+            </h2>
           </header>
         </div>
 
@@ -156,16 +204,42 @@ export default function Home() {
         <aside className="dark:bg-gray-800 bg-gray-400 lg:fixed lg:bottom-0 lg:left-0 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5 xl:left-auto">
           <ul role="list" className="divide-y divide-white/5">
             {articles.map((article, index) => (
-              <li key={article.link} className={(selectedArticle === index ? 'dark:bg-gray-800 bg-gray-500' : `${index % 2 === 0 ? 'dark:bg-gray-800 bg-gray-100' : 'dark:bg-gray-700 bg-gray-300'}`) + " px-4 py-4 sm:px-6 lg:px-8 cursor-pointer"} onClick={() => { setArticleOpen(true); setSelectedArticle(index) }}>
+              <li
+                key={article.link}
+                className={
+                  (selectedArticle === index
+                    ? "dark:bg-gray-800 bg-gray-500"
+                    : `${
+                        index % 2 === 0
+                          ? "dark:bg-gray-800 bg-gray-100"
+                          : "dark:bg-gray-700 bg-gray-300"
+                      }`) + " px-4 py-4 sm:px-6 lg:px-8 cursor-pointer"
+                }
+                onClick={() => {
+                  setArticleOpen(true);
+                  setSelectedArticle(index);
+                }}
+              >
                 <div className="flex items-center flex-col gap-x-3">
-                  <h3 className="flex-auto w-full truncate text-sm font-semibold leading-6 dark:text-white text-black">{article.title}</h3>
-                  <p id="description" className="flex-auto w-full truncate text-xs dark:text-gray-400 text-gray-800">
+                  <h3 className="flex-auto w-full truncate text-sm font-semibold leading-6 dark:text-white text-black">
+                    {article.title}
+                  </h3>
+                  <p
+                    id="description"
+                    className="flex-auto w-full truncate text-xs dark:text-gray-400 text-gray-800"
+                  >
                     {article.description}
                   </p>
                 </div>
                 <p className="mt-3 truncate text-sm dark:text-gray-500 text-gray-800">
-                  Published on <span className="dark:text-gray-400 text-gray-800">{article.name}</span>
-                  <time dateTime={article.dateTime} className="flex-none text-xs m-2 dark:text-gray-600 text-gray-900">
+                  Published on{" "}
+                  <span className="dark:text-gray-400 text-gray-800">
+                    {article.name}
+                  </span>
+                  <time
+                    dateTime={article.dateTime}
+                    className="flex-none text-xs m-2 dark:text-gray-600 text-gray-900"
+                  >
                     {article.date}
                   </time>
                 </p>
@@ -176,9 +250,11 @@ export default function Home() {
         <main className="hidden w-full h-full lg:block lg:fixed lg:left-96 xl:left-[42rem]">
           {articles.length > 0 ? (
             <Article article={articles[selectedArticle]} />
-          ) : <Loading />}
+          ) : (
+            <Loading />
+          )}
         </main>
-      </div >
-    </div >
-  )
+      </div>
+    </div>
+  );
 }

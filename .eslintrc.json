@@ -2,11 +2,5 @@
   "extends": [
     "next/core-web-vitals",
     "prettier"
-  ],
-  "max-len": [
-    "error",
-    {
-      "code": 80
-    }
   ]
 }
