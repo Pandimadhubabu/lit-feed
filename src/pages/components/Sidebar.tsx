@@ -1,24 +1,25 @@
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { Feed, NavigationItem, User } from "../types";
 import { classNames } from "../utils";
+import Link from "next/link";
+import { useFeeds } from "../hooks/useFeeds";
+import { useUser } from "../hooks/useUser";
 
 export function Sidebar({
   navigation,
   selectedNavigation,
   onNavigationChange,
-  feeds,
   selectedFeed,
   onFeedChange,
-  user,
 }: {
   navigation: NavigationItem[];
   selectedNavigation: number;
   onNavigationChange: (index: number) => void;
-  feeds: Feed[];
   selectedFeed: number;
   onFeedChange: (index: number) => void;
-  user?: User;
 }) {
+  const user = useUser();
+  const feeds = useFeeds({ userId: user?.id });
   return (
     <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 ring-1 ring-white/10">
       <div className="flex h-16 shrink-0 items-center">
@@ -88,13 +89,13 @@ export function Sidebar({
             <ul role="list" className="-mx-2 space-y-1">
               {navigation.map((item, index) => (
                 <li key={item.name}>
-                  <a
-                    onClick={() => onNavigationChange(index)}
+                  <Link
+                    href={item.link}
                     className={classNames(
                       index === selectedNavigation
                         ? "bg-gray-800 text-white"
                         : "text-gray-400 hover:text-white hover:bg-gray-800",
-                      "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer",
+                      "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer"
                     )}
                   >
                     <item.icon
@@ -102,7 +103,7 @@ export function Sidebar({
                       aria-hidden="true"
                     />
                     {item.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -124,7 +125,7 @@ export function Sidebar({
                       index === selectedFeed
                         ? "bg-gray-800 text-white"
                         : "text-gray-400 hover:text-white hover:bg-gray-800",
-                      "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer",
+                      "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer"
                     )}
                   >
                     <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">

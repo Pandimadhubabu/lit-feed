@@ -33,9 +33,12 @@
     "prettier": "^3.0.3"
   },
   "lint-staged": {
-    "*.{ts,css,md}": [
+    "*.ts": [
       "prettier --write",
       "eslint --fix"
+    ],
+    "*.{md,css}": [
+      "prettier --write"
     ]
   }
 }

@@ -7,10 +7,10 @@ export function useFeeds({ userId }: { userId?: string }) {
   useEffect(() => {
     // Replace this with a call to /api/feed
     setSources([
-      { id: "0", name: "All Feeds", link: "#" },
-      { id: "1", name: "Stackoverflow Blog", link: "#" },
-      { id: "2", name: "Hacker News", link: "#" },
-      { id: "3", name: "Martin Fowler", link: "#" },
+      { id: "0", name: "All Feeds", href: "#" },
+      { id: "1", name: "Stackoverflow Blog", href: "#" },
+      { id: "2", name: "Hacker News", href: "#" },
+      { id: "3", name: "Martin Fowler", href: "#" },
     ]);
   }, []);
 
