@@ -7,13 +7,13 @@ import {
   StarIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { Article } from "./components/Article";
+import { Loading } from "./components/Loading";
 import { Sidebar } from "./components/Sidebar";
+import { useArticles } from "./hooks/useArticles";
 import { useFeeds } from "./hooks/useFeeds";
 import { useUser } from "./hooks/useUser";
-import { useArticles } from "./hooks/useArticles";
-import { Loading } from "./components/Loading";
 
 const navigation = [
   { name: "Saved", href: "#", icon: StarIcon, current: false },
@@ -208,7 +208,7 @@ export default function Home() {
                 key={article.link}
                 className={
                   (selectedArticle === index
-                    ? "dark:bg-gray-800 bg-gray-500"
+                    ? "bg-gray-700"
                     : `${
                         index % 2 === 0
                           ? "dark:bg-gray-800 bg-gray-100"
@@ -221,24 +221,54 @@ export default function Home() {
                 }}
               >
                 <div className="flex items-center flex-col gap-x-3">
-                  <h3 className="flex-auto w-full truncate text-sm font-semibold leading-6 dark:text-white text-black">
+                  <h3
+                    className={
+                      (selectedArticle === index
+                        ? "text-white"
+                        : "dark:text-white text-black") +
+                      " flex-auto w-full truncate text-sm font-semibold leading-6"
+                    }
+                  >
                     {article.title}
                   </h3>
                   <p
                     id="description"
-                    className="flex-auto w-full truncate text-xs dark:text-gray-400 text-gray-800"
+                    className={
+                      (selectedArticle === index
+                        ? "text-gray-400"
+                        : "dark:text-gray-400 text-gray-800") +
+                      " flex-auto w-full truncate text-xs"
+                    }
                   >
                     {article.description}
                   </p>
                 </div>
-                <p className="mt-3 truncate text-sm dark:text-gray-500 text-gray-800">
+                <p
+                  className={
+                    (selectedArticle === index
+                      ? "text-gray-500"
+                      : "dark:text-gray-500 text-gray-800") +
+                    " mt-3 truncate text-sm"
+                  }
+                >
                   Published on{" "}
-                  <span className="dark:text-gray-400 text-gray-800">
+                  <span
+                    className={
+                      selectedArticle === index
+                        ? "text-gray-400"
+                        : "dark:text-gray-400 text-gray-800"
+                    }
+                  >
                     {article.name}
                   </span>
                   <time
                     dateTime={article.dateTime}
-                    className="flex-none text-xs m-2 dark:text-gray-600 text-gray-900"
+                    className={
+                      (selectedArticle === index
+                        ? "text-gray-600"
+                        : "dark:text-gray-600 text-gray-900") +
+                      " flex-none text-xs m-2"
+                    }
                   >
                     {article.date}
                   </time>
