@@ -1,14 +1,16 @@
-import { useState } from "react"
-import { NavigationItem, Feed, User } from "../types"
+import { PencilSquareIcon } from "@heroicons/react/24/outline"
+import { Feed, NavigationItem, User } from "../types"
 import { classNames } from "../utils"
 
-export function Sidebar({ navigation, feeds, user }: {
+export function Sidebar({ navigation, selectedNavigation, onNavigationChange, feeds, selectedFeed, onFeedChange, user }: {
   navigation: NavigationItem[]
+  selectedNavigation: number
+  onNavigationChange: (index: number) => void
   feeds: Feed[]
+  selectedFeed: number
+  onFeedChange: (index: number) => void
   user?: User
 }) {
-  const [selectedFeed, setSelectedFeed] = useState(0)
-  const [selectedNavigation, setSelectedNavigation] = useState(0)
 
   return (
     <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 ring-1 ring-white/10">
@@ -52,12 +54,12 @@ export function Sidebar({ navigation, feeds, user }: {
               {navigation.map((item, index) => (
                 <li key={item.name}>
                   <a
-                    href={item.href}
+                    onClick={() => onNavigationChange(index)}
                     className={classNames(
                       index === selectedNavigation
                         ? 'bg-gray-800 text-white'
                         : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer'
                     )}
                   >
                     <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
@@ -68,17 +70,20 @@ export function Sidebar({ navigation, feeds, user }: {
             </ul>
           </li>
           <li>
-            <div className="text-xs font-semibold leading-6 text-gray-400">Your feeds</div>
+            <div className="flex justify-between text-xs font-semibold leading-6 text-gray-400">
+              Your feeds
+              <PencilSquareIcon className="h-4 w-4 ml-1.5 text-gray-400" aria-hidden="true" />
+            </div>
             <ul role="list" className="-mx-2 mt-2 space-y-1">
               {feeds.map((feed, index) => (
                 <li key={feed.name}>
                   <a
-                    href={feed.link}
+                    onClick={() => onFeedChange(index)}
                     className={classNames(
                       index === selectedFeed
                         ? 'bg-gray-800 text-white'
                         : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer'
                     )}
                   >
                     <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">

@@ -25,6 +25,8 @@ export default function Home() {
   const [articleOpen, setArticleOpen] = useState(false)
   const [selectedArticle, setSelectedArticle] = useState(0)
   const [selectedFeed, setSelectedFeed] = useState(0)
+  const [selectedNavigation, setSelectedNavigation] = useState(0)
+
   const user = useUser()
   const feeds = useFeeds({ userId: user?.id })
   const articles = useArticles({ feedId: feeds[selectedFeed]?.id, userId: user?.id })
@@ -73,7 +75,7 @@ export default function Home() {
                   </div>
                 </Transition.Child>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
-                <Sidebar feeds={feeds} navigation={navigation} user={user} />
+                <Sidebar navigation={navigation} selectedNavigation={selectedNavigation} onNavigationChange={setSelectedNavigation} feeds={feeds} selectedFeed={selectedFeed} onFeedChange={setSelectedFeed} user={user} />
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -134,7 +136,7 @@ export default function Home() {
       {/* Static sidebar for desktop */}
       <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <Sidebar feeds={feeds} navigation={navigation} />
+        <Sidebar navigation={navigation} selectedNavigation={selectedNavigation} onNavigationChange={setSelectedNavigation} feeds={feeds} selectedFeed={selectedFeed} onFeedChange={setSelectedFeed} />
       </div>
 
       <div className="xl:pl-72">
@@ -150,11 +152,11 @@ export default function Home() {
           </header>
         </div>
 
-        {/* Feed list */}
+        {/* Main content */}
         <aside className="dark:bg-gray-800 bg-gray-400 lg:fixed lg:bottom-0 lg:left-0 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5 xl:left-auto">
           <ul role="list" className="divide-y divide-white/5">
             {articles.map((article, index) => (
-              <li key={article.link} className={`${index % 2 === 0 ? 'dark:bg-gray-800 bg-gray-100' : 'dark:bg-gray-700 bg-gray-300'}` + " px-4 py-4 sm:px-6 lg:px-8"} onClick={() => { setArticleOpen(true); setSelectedArticle(index) }}>
+              <li key={article.link} className={(selectedArticle === index ? 'dark:bg-gray-800 bg-gray-500' : `${index % 2 === 0 ? 'dark:bg-gray-800 bg-gray-100' : 'dark:bg-gray-700 bg-gray-300'}`) + " px-4 py-4 sm:px-6 lg:px-8 cursor-pointer"} onClick={() => { setArticleOpen(true); setSelectedArticle(index) }}>
                 <div className="flex items-center flex-col gap-x-3">
                   <h3 className="flex-auto w-full truncate text-sm font-semibold leading-6 dark:text-white text-black">{article.title}</h3>
                   <p id="description" className="flex-auto w-full truncate text-xs dark:text-gray-400 text-gray-800">
