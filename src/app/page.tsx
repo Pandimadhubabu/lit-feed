@@ -16,9 +16,9 @@ import { useFeeds } from "./hooks/useFeeds";
 import { useUser } from "./hooks/useUser";
 
 const navigation = [
-  { name: "Saved", href: "#", icon: StarIcon, current: false },
-  { name: "Settings", href: "#", icon: Cog6ToothIcon, current: false },
-  { name: "All Feeds", href: "#", icon: Square3Stack3DIcon, current: true },
+  { name: "Articles", href: "#", icon: Square3Stack3DIcon },
+  { name: "Saved", href: "#", icon: StarIcon },
+  { name: "Settings", href: "#", icon: Cog6ToothIcon },
 ];
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -195,7 +195,7 @@ export default function Home() {
 
           <header className="flex items-center justify-between border-b border-white/5 w-full px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
             <h2 className="text-base font-semibold leading-7 text-white">
-              All feeds
+              {feeds[selectedFeed]?.name}
             </h2>
           </header>
         </div>
