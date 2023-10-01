@@ -15,13 +15,13 @@ import {
   ReactElement,
   ReactNode,
 } from "react";
-import { Sidebar } from "./components/Sidebar";
-import { useFeeds } from "./hooks/useFeeds";
-import { useUser } from "./hooks/useUser";
+import { Sidebar } from "../components/Sidebar";
+import { useFeeds } from "../hooks/useFeeds";
+import { useUser } from "../hooks/useUser";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import React from "react";
 import { AppProps } from "next/app";
-import { Header } from "./components/Header";
+import { Header } from "../components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 

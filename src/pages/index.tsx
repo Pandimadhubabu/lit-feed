@@ -6,12 +6,12 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
-import { Article } from "./components/Article";
-import { Loading } from "./components/Loading";
-import { useArticles } from "./hooks/useArticles";
-import { useFeeds } from "./hooks/useFeeds";
-import { useUser } from "./hooks/useUser";
-import { Feed, User } from "./types";
+import { Article } from "../components/Article";
+import { Loading } from "../components/Loading";
+import { useArticles } from "../hooks/useArticles";
+import { useFeeds } from "../hooks/useFeeds";
+import { useUser } from "../hooks/useUser";
+import { Feed, User } from "../types";
 
 const navigation = [
   { name: "Articles", link: "/", icon: Square3Stack3DIcon },
