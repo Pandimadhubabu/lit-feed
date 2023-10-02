@@ -1,27 +1,17 @@
-import { Transition, Dialog } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import {
+  Cog6ToothIcon,
   Square3Stack3DIcon,
   StarIcon,
-  Cog6ToothIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-import "./globals.css";
-import type { Metadata, NextPage } from "next";
-import { Inter } from "next/font/google";
-import {
-  useState,
-  Fragment,
-  PropsWithChildren,
-  ReactElement,
-  ReactNode,
-} from "react";
-import { Sidebar } from "../components/Sidebar";
-import { useFeeds } from "../hooks/useFeeds";
-import { useUser } from "../hooks/useUser";
-import { Bars3Icon } from "@heroicons/react/24/outline";
-import React from "react";
+import type { NextPage } from "next";
 import { AppProps } from "next/app";
+import { Inter } from "next/font/google";
+import { Fragment, ReactElement, ReactNode, useState } from "react";
 import { Header } from "../components/Header";
+import { Sidebar } from "../components/Sidebar";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

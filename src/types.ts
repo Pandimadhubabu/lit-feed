@@ -24,7 +24,7 @@ export type Email = string;
 export type Feed = {
   id: ID;
   name: Name;
-  href: Href;
+  link: Href;
   iconUrl?: Href;
 };
 

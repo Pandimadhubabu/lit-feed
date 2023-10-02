@@ -1,36 +1,21 @@
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  Cog6ToothIcon,
-  Square3Stack3DIcon,
-  StarIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
 import { Article } from "../components/Article";
 import { Loading } from "../components/Loading";
 import { useArticles } from "../hooks/useArticles";
-import { useFeeds } from "../hooks/useFeeds";
-import { useUser } from "../hooks/useUser";
-import { Feed, User } from "../types";
+import { User } from "../types";
 
-const navigation = [
-  { name: "Articles", link: "/", icon: Square3Stack3DIcon },
-  { name: "Saved", link: "/saved", icon: StarIcon },
-  { name: "Settings", link: "/settings", icon: Cog6ToothIcon },
-];
-export default function Home({
-  user,
-  selectedFeed,
-}: {
-  user: User;
-  selectedFeed: number;
-}) {
+export default function Home({ user }: { user: User }) {
   const [articleOpen, setArticleOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(0);
-  const feeds = useFeeds({ userId: user?.id });
+  const feedId =
+    typeof document !== "undefined"
+      ? document.location.pathname.split("/")[2]
+      : "0";
 
   const articles = useArticles({
-    feedId: feeds[selectedFeed]?.id,
+    feedId,
     userId: user?.id,
   });
 

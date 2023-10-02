@@ -2,17 +2,24 @@ import { useEffect, useState } from "react";
 import { Feed } from "../types";
 
 export function useFeeds({ userId }: { userId?: string }) {
-  const [sources, setSources] = useState<Feed[]>([]);
+  const [feeds, setfeeds] = useState<Feed[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     // Replace this with a call to /api/feed
-    setSources([
-      { id: "0", name: "All Feeds", href: "#" },
-      { id: "1", name: "Stackoverflow Blog", href: "#" },
-      { id: "2", name: "Hacker News", href: "#" },
-      { id: "3", name: "Martin Fowler", href: "#" },
-    ]);
-  }, []);
+    const feeds = [
+      { id: "1", name: "Stackoverflow Blog", link: "/feeds/1" },
+      { id: "2", name: "Hacker News", link: "/feeds/2" },
+      { id: "3", name: "Martin Fowler", link: "/feeds/3" },
+    ];
+    setfeeds([{ id: "0", name: "All Feeds", link: "/" }, ...feeds]);
+    setIsLoading(false);
+  }, [userId]);
 
-  return sources;
+  return {
+    feeds,
+    isLoading,
+    error,
+  };
 }

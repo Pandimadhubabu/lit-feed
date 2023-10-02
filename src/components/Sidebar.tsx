@@ -1,25 +1,21 @@
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { Feed, NavigationItem, User } from "../types";
-import { classNames } from "../utils";
+import {
+  Cog6ToothIcon,
+  PencilSquareIcon,
+  Square3Stack3DIcon,
+  StarIcon,
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useFeeds } from "../hooks/useFeeds";
-import { useUser } from "../hooks/useUser";
+import { User } from "../types";
+import { classNames } from "../utils";
 
-export function Sidebar({
-  navigation,
-  selectedNavigation,
-  onNavigationChange,
-  selectedFeed,
-  onFeedChange,
-}: {
-  navigation: NavigationItem[];
-  selectedNavigation: number;
-  onNavigationChange: (index: number) => void;
-  selectedFeed: number;
-  onFeedChange: (index: number) => void;
-}) {
-  const user = useUser();
-  const feeds = useFeeds({ userId: user?.id });
+const navigation = [
+  { name: "Articles", link: "/", icon: Square3Stack3DIcon },
+  { name: "Saved", link: "/saved", icon: StarIcon },
+  { name: "Settings", link: "/settings", icon: Cog6ToothIcon },
+];
+export function Sidebar({ user }: { user?: User }) {
+  const { feeds, isLoading, error } = useFeeds({ userId: user?.id });
   return (
     <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 ring-1 ring-white/10">
       <div className="flex h-16 shrink-0 items-center">
@@ -92,7 +88,8 @@ export function Sidebar({
                   <Link
                     href={item.link}
                     className={classNames(
-                      index === selectedNavigation
+                      typeof document !== "undefined" &&
+                        document.location.pathname === item.link
                         ? "bg-gray-800 text-white"
                         : "text-gray-400 hover:text-white hover:bg-gray-800",
                       "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer"
@@ -117,28 +114,43 @@ export function Sidebar({
               />
             </div>
             <ul role="list" className="-mx-2 mt-2 space-y-1">
-              {feeds.map((feed, index) => (
-                <li key={feed.name}>
-                  <a
-                    onClick={() => onFeedChange(index)}
-                    className={classNames(
-                      index === selectedFeed
-                        ? "bg-gray-800 text-white"
-                        : "text-gray-400 hover:text-white hover:bg-gray-800",
-                      "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer"
-                    )}
-                  >
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                      {feed.iconUrl ? (
-                        <img className="h-4 w-4" src={feed.iconUrl} alt="" />
-                      ) : (
-                        <></>
-                      )}
-                    </span>
-                    <span className="truncate">{feed.name}</span>
-                  </a>
-                </li>
-              ))}
+              {isLoading
+                ? [0, 1, 2].map((index) => (
+                    <li
+                      key={index}
+                      className="animate-pulse flex justify-between p-2"
+                    >
+                      <span className="h-6 w-6 shrink-0 rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white"></span>
+                      <div className="w-full m-2 h-2 bg-slate-200 rounded"></div>
+                    </li>
+                  ))
+                : feeds.map((feed, index) => (
+                    <li key={feed.name}>
+                      <Link
+                        href={feed.link}
+                        className={classNames(
+                          typeof document !== "undefined" &&
+                            document.location.pathname === feed.link
+                            ? "bg-gray-800 text-white"
+                            : "text-gray-400 hover:text-white hover:bg-gray-800",
+                          "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer"
+                        )}
+                      >
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
+                          {feed.iconUrl ? (
+                            <img
+                              className="h-4 w-4"
+                              src={feed.iconUrl}
+                              alt=""
+                            />
+                          ) : (
+                            <></>
+                          )}
+                        </span>
+                        <span className="truncate">{feed.name}</span>
+                      </Link>
+                    </li>
+                  ))}
             </ul>
           </li>
           {user ? (
