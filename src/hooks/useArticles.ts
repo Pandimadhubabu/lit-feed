@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react";
-import { Article } from "../types";
+import { Article } from "@/types";
 
-export function useArticles({
-  userId,
-  feedId,
-}: {
-  userId?: string;
-  feedId?: string;
-}) {
+export function useArticles({ feedId }: { feedId?: string }) {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     // Replace this with a call to /api/feed/:sourceId
@@ -32,7 +28,12 @@ export function useArticles({
         id: "2",
       },
     ]);
+    setIsLoading(false);
   }, [feedId]);
 
-  return articles;
+  return {
+    articles,
+    isLoading,
+    error,
+  };
 }

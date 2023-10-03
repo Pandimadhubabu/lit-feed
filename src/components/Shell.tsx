@@ -1,3 +1,6 @@
+import { Header } from "@/components/Header";
+import { Sidebar } from "@/components/Sidebar";
+import "@/globals.css";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Cog6ToothIcon,
@@ -5,15 +8,15 @@ import {
   StarIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-import type { NextPage } from "next";
-import { AppProps } from "next/app";
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Fragment, ReactElement, ReactNode, useState } from "react";
-import { Header } from "../components/Header";
-import { Sidebar } from "../components/Sidebar";
-import "./globals.css";
+import { Fragment, ReactNode, useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
+export const metadata: Metadata = {
+  title: "Lit Feed!",
+  description: "Yet another feed reader",
+};
 
 const navigation = [
   { name: "Articles", link: "/", icon: Square3Stack3DIcon },
@@ -21,20 +24,8 @@ const navigation = [
   { name: "Settings", link: "/settings", icon: Cog6ToothIcon },
 ];
 
-type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
-
-export default function App({
-  Component,
-  pageProps,
-}: AppProps & {
-  Component: NextPageWithLayout;
-}) {
+export default function Shell({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedFeed, setSelectedFeed] = useState(0);
-  const [selectedNavigation, setSelectedNavigation] = useState(0);
-
   return (
     <div>
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -90,36 +81,22 @@ export default function App({
                   </div>
                 </Transition.Child>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
-                <Sidebar
-                  navigation={navigation}
-                  selectedNavigation={selectedNavigation}
-                  onNavigationChange={setSelectedNavigation}
-                  selectedFeed={selectedFeed}
-                  onFeedChange={setSelectedFeed}
-                />
+                <Sidebar />
               </Dialog.Panel>
             </Transition.Child>
           </div>
         </Dialog>
       </Transition.Root>
 
-      <Header setSidebarOpen={setSidebarOpen} selectedFeed={selectedFeed} />
+      <Header setSidebarOpen={setSidebarOpen} />
 
       {/* Static sidebar for desktop */}
       <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <Sidebar
-          navigation={navigation}
-          selectedNavigation={selectedNavigation}
-          onNavigationChange={setSelectedNavigation}
-          selectedFeed={selectedFeed}
-          onFeedChange={setSelectedFeed}
-        />
+        <Sidebar />
       </div>
 
-      <div className="xl:pl-72">
-        <Component {...pageProps} />
-      </div>
+      <div className="xl:pl-72">{children}</div>
     </div>
   );
 }

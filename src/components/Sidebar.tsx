@@ -1,3 +1,8 @@
+import { useFeeds } from "@/hooks/useFeeds";
+import { usePath } from "@/hooks/usePath";
+import { useSegments } from "@/hooks/useSegments";
+import { classNames } from "@/utils";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Cog6ToothIcon,
   PencilSquareIcon,
@@ -5,17 +10,27 @@ import {
   StarIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useFeeds } from "../hooks/useFeeds";
-import { User } from "../types";
-import { classNames } from "../utils";
+import { useEffect, useState } from "react";
 
 const navigation = [
   { name: "Articles", link: "/", icon: Square3Stack3DIcon },
   { name: "Saved", link: "/saved", icon: StarIcon },
   { name: "Settings", link: "/settings", icon: Cog6ToothIcon },
 ];
-export function Sidebar({ user }: { user?: User }) {
-  const { feeds, isLoading, error } = useFeeds({ userId: user?.id });
+export function Sidebar() {
+  const { user, isLoading: isUserLoading, error: userError } = useUser();
+  const { feeds, isLoading: isFeedLoading, error: feedError } = useFeeds();
+  const [segmentName, feedId] = useSegments();
+  const path = usePath();
+  const [selectedNavigation, setSelectedNavigation] = useState(0);
+  const [selectedFeed, setSelectedFeed] = useState(0);
+
+  useEffect(() => {
+    setSelectedNavigation(navigation.findIndex((item) => item.link === path));
+
+    setSelectedFeed(feeds.findIndex((feed) => feed.link === path));
+  }, [feeds, path]);
+
   return (
     <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 ring-1 ring-white/10">
       <div className="flex h-16 shrink-0 items-center">
@@ -88,8 +103,7 @@ export function Sidebar({ user }: { user?: User }) {
                   <Link
                     href={item.link}
                     className={classNames(
-                      typeof document !== "undefined" &&
-                        document.location.pathname === item.link
+                      selectedNavigation === index
                         ? "bg-gray-800 text-white"
                         : "text-gray-400 hover:text-white hover:bg-gray-800",
                       "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer"
@@ -114,7 +128,7 @@ export function Sidebar({ user }: { user?: User }) {
               />
             </div>
             <ul role="list" className="-mx-2 mt-2 space-y-1">
-              {isLoading
+              {isFeedLoading
                 ? [0, 1, 2].map((index) => (
                     <li
                       key={index}
@@ -129,8 +143,7 @@ export function Sidebar({ user }: { user?: User }) {
                       <Link
                         href={feed.link}
                         className={classNames(
-                          typeof document !== "undefined" &&
-                            document.location.pathname === feed.link
+                          selectedFeed === index
                             ? "bg-gray-800 text-white"
                             : "text-gray-400 hover:text-white hover:bg-gray-800",
                           "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer"
@@ -153,19 +166,21 @@ export function Sidebar({ user }: { user?: User }) {
                   ))}
             </ul>
           </li>
-          {user ? (
+          {!isUserLoading ? (
             <li className="-mx-6 mt-auto">
               <a
                 href="#"
                 className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
               >
-                <img
-                  className="h-8 w-8 rounded-full bg-gray-800"
-                  src={user.imageUrl}
-                  alt=""
-                />
+                {!!user?.picture && (
+                  <img
+                    className="h-8 w-8 rounded-full bg-gray-800"
+                    src={user?.picture}
+                    alt=""
+                  />
+                )}
                 <span className="sr-only">Your profile</span>
-                <span aria-hidden="true">{user.name}</span>
+                <span aria-hidden="true">{user?.nickname}</span>
               </a>
             </li>
           ) : (

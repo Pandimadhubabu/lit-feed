@@ -37,10 +37,3 @@ export type Article = {
   date: Date;
   dateTime: DateTime;
 };
-
-export type User = {
-  name: Name;
-  email: Email;
-  imageUrl: Href;
-  id: ID;
-};

@@ -1,27 +1,32 @@
+"use client";
+import { Article } from "@/components/Article";
+import { Loading } from "@/components/Loading";
+import Shell from "@/components/Shell";
+import { useArticles } from "@/hooks/useArticles";
+import { useSegments } from "@/hooks/useSegments";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
-import { Article } from "../components/Article";
-import { Loading } from "../components/Loading";
-import { useArticles } from "../hooks/useArticles";
-import { User } from "../types";
 
-export default function Home({ user }: { user: User }) {
+export default function Home() {
   const [articleOpen, setArticleOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(0);
-  const feedId =
-    typeof document !== "undefined"
-      ? document.location.pathname.split("/")[2]
-      : "0";
+  const segments = useSegments();
+  const [_, feedId] = segments;
 
-  const articles = useArticles({
+  const {
+    articles,
+    isLoading: isLoadingArticles,
+    error: articlesError,
+  } = useArticles({
     feedId,
-    userId: user?.id,
   });
 
   return (
-    <>
-      {articles.length > 0 ? (
+    <Shell>
+      {isLoadingArticles ? (
+        <Loading />
+      ) : (
         <Transition.Root show={articleOpen} as={Fragment}>
           <Dialog
             as="div"
@@ -81,8 +86,6 @@ export default function Home({ user }: { user: User }) {
             </div>
           </Dialog>
         </Transition.Root>
-      ) : (
-        <Loading />
       )}
 
       {/* Main content */}
@@ -163,12 +166,12 @@ export default function Home({ user }: { user: User }) {
         </ul>
       </aside>
       <main className="hidden w-full h-full lg:block lg:fixed lg:left-96 xl:left-[42rem]">
-        {articles.length > 0 ? (
-          <Article article={articles[selectedArticle]} />
-        ) : (
+        {isLoadingArticles ? (
           <Loading />
+        ) : (
+          <Article article={articles[selectedArticle]} />
         )}
       </main>
-    </>
+    </Shell>
   );
 }

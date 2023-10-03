@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import { Article } from "../types";
+import { Article } from "@/types";
 
 export function Article({ article }: { article: Article }) {
   return (

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Feed } from "../types";
+import { Feed } from "@/types";
 
-export function useFeeds({ userId }: { userId?: string }) {
+export function useFeeds() {
   const [feeds, setfeeds] = useState<Feed[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -15,7 +15,7 @@ export function useFeeds({ userId }: { userId?: string }) {
     ];
     setfeeds([{ id: "0", name: "All Feeds", link: "/" }, ...feeds]);
     setIsLoading(false);
-  }, [userId]);
+  }, []);
 
   return {
     feeds,
