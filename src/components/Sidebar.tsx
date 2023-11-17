@@ -5,6 +5,7 @@ import { classNames } from "@/utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Cog6ToothIcon,
+  FunnelIcon,
   PencilSquareIcon,
   Square3Stack3DIcon,
   StarIcon,
@@ -15,6 +16,7 @@ import { useEffect, useState } from "react";
 const navigation = [
   { name: "Articles", link: "/", icon: Square3Stack3DIcon },
   { name: "Saved", link: "/saved", icon: StarIcon },
+  { name: "Filters", link: "/filters", icon: FunnelIcon },
   { name: "Settings", link: "/settings", icon: Cog6ToothIcon },
 ];
 export function Sidebar() {
