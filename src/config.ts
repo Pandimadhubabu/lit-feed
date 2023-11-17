@@ -3,6 +3,7 @@ if (!process.env.MONGO_URL) {
     "Please define the MONGO_URL environment variable inside .env.local",
   );
 }
+
 export const mongoUrl = process.env.MONGO_URL;
 export const feedDatabaseName = process.env.MONGO_DB_NAME || "feed";
 export const feedsCollectionName =

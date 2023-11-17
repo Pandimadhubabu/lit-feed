@@ -13,28 +13,22 @@ export function useFeeds() {
         id: "1",
         name: "Stackoverflow Blog",
         href: "stackoverflow.com",
-        link: "/feeds/1",
         unread: 1,
       },
       {
         id: "2",
         name: "Hacker News",
         href: "hackernews.com",
-        link: "/feeds/2",
         unread: 0,
       },
       {
         id: "3",
         name: "Martin Fowler",
         href: "martinfowler.com",
-        link: "/feeds/3",
         unread: 0,
       },
     ];
-    setfeeds([
-      { id: "0", name: "All Feeds", href: "#", link: "/", unread: 1 },
-      ...feeds,
-    ]);
+    setfeeds([{ id: "0", name: "All Feeds", href: "#", unread: 1 }, ...feeds]);
     setIsLoading(false);
   }, []);
 

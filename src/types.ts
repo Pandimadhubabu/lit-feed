@@ -27,7 +27,6 @@ export interface Feed extends Identifiable {
   href: Href;
   name: Name;
   unread: number;
-  link: Href;
 }
 
 export interface Article extends Identifiable {

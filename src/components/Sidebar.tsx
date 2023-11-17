@@ -1,7 +1,7 @@
 import { useFeeds } from "@/hooks/useFeeds";
 import { usePath } from "@/hooks/usePath";
 import { useSegments } from "@/hooks/useSegments";
-import { classNames } from "@/utils";
+import { classNames, getFeedLink } from "@/utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Cog6ToothIcon,
@@ -30,7 +30,7 @@ export function Sidebar() {
   useEffect(() => {
     setSelectedNavigation(navigation.findIndex((item) => item.link === path));
 
-    setSelectedFeed(feeds.findIndex((feed) => feed.link === path));
+    setSelectedFeed(feeds.findIndex((feed) => getFeedLink(feed) === path));
   }, [feeds, path]);
 
   return (
@@ -143,7 +143,7 @@ export function Sidebar() {
                 : feeds.map((feed, index) => (
                     <li key={feed.name}>
                       <Link
-                        href={feed.link}
+                        href={getFeedLink(feed)}
                         className={classNames(
                           selectedFeed === index
                             ? "bg-gray-800 text-white"
