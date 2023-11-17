@@ -1,0 +1,201 @@
+openapi: 3.0.0
+info:
+  title: Lit Feed API
+  description: This is an internal authenticated API for managing Lit Feed feeds and articles. This API is meant to be used by the different implementations of the Lit Feed frontend applications.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /feeds:
+    get:
+      summary: Get all feeds
+      description: A list of feeds managed by the user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Feed"
+    post:
+      summary: Add a new feed
+      description: Add a new feed
+      requestBody:
+        description: Feed to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Feed"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Feed"
+  /feeds/{feedId}:
+    get:
+      summary: Get a feed by ID
+      description: Get a feed by ID
+      parameters:
+        - name: feedId
+          in: path
+          description: ID of feed to get
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Feed"
+    patch:
+      summary: Update a feed
+      description: Update a feed
+      parameters:
+        - name: feedId
+          in: path
+          description: ID of feed to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Feed to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Feed"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Feed"
+    delete:
+      summary: Delete a feed
+      description: Delete a feed
+      parameters:
+        - name: feedId
+          in: path
+          description: ID of feed to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Feed"
+  /feeds/{feedId}/articles:
+    get:
+      summary: Get all articles from a feed
+      description: Get all articles from a feed
+      parameters:
+        - name: feedId
+          in: path
+          description: ID of feed to get articles for
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Article"
+  /feeds/{feedId}/articles/{articleId}:
+    get:
+      summary: Get an article by ID
+      description: Get an article by ID
+      parameters:
+        - name: articlesPerPage
+          in: query
+          description: Number of articles per page
+          required: false
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+        - name: feedId
+          in: path
+          description: ID of feed to get article from
+          required: true
+          schema:
+            type: string
+        - name: articleId
+          in: path
+          description: ID of article to get
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Article"
+components:
+  schemas:
+    Feed:
+      type: object
+      required:
+        - id
+        - href
+        - name
+        - unread
+      properties:
+        id:
+          type: string
+        image:
+          type: string
+        href:
+          type: string
+        name:
+          type: string
+        unread:
+          type: integer
+    Article:
+      type: object
+      required:
+        - id
+        - title
+        - feedName
+        - duration
+        - isRead
+        - isSaved
+      properties:
+        id:
+          type: string
+        image:
+          type: string
+        title:
+          type: string
+        summary:
+          type: string
+        feedName:
+          type: string
+        duration:
+          type: string
+        isRead:
+          type: boolean
+        isSaved:
+          type: boolean
+        content:
+          type: string
