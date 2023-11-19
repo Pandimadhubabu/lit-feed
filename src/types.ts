@@ -16,24 +16,40 @@ export type Name = string;
 export type PageLink = string;
 export type Href = string;
 export type Title = string;
-export type Description = string;
+export type Summary = string;
 export type Date = string;
 export type DateTime = string;
 export type Email = string;
-
-export type Feed = {
+export type Duration = string;
+export interface Feed extends Identifiable {
   id: ID;
-  name: Name;
-  link: Href;
-  iconUrl?: Href;
-};
-
-export type Article = {
-  id: ID;
-  title: Title;
-  description: Description;
+  image?: Href;
   href: Href;
   name: Name;
+  unread: number;
+  link: Href;
+}
+
+export interface Article extends Identifiable {
+  id: ID;
+  feedId: Feed["id"];
+  feedName: Feed["name"];
+  href: Href;
+  image?: Href;
+  title: Title;
+  summary: Summary;
+  duration: Duration;
+  isRead: boolean;
+  isSaved: boolean;
+  content?: string;
   date: Date;
-  dateTime: DateTime;
-};
+}
+
+export interface MongoDocument {
+  _id: ID;
+  [key: string]: unknown;
+}
+
+export interface Identifiable {
+  id: ID;
+}

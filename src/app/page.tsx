@@ -128,7 +128,7 @@ export default function Home() {
                     " flex-auto w-full truncate text-xs"
                   }
                 >
-                  {article.description}
+                  {article.summary}
                 </p>
               </div>
               <p
@@ -147,10 +147,10 @@ export default function Home() {
                       : "dark:text-gray-400 text-gray-800"
                   }
                 >
-                  {article.name}
+                  {article.feedName}
                 </span>
                 <time
-                  dateTime={article.dateTime}
+                  dateTime={article.duration}
                   className={
                     (selectedArticle === index
                       ? "text-gray-600"

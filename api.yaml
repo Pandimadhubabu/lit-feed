@@ -177,19 +177,24 @@ components:
         - id
         - title
         - feedName
+        - href
         - duration
         - isRead
         - isSaved
       properties:
         id:
           type: string
+        feedId:
+          type: string
+        feedName:
+          type: string
+        href:
+          type: string
         image:
           type: string
         title:
           type: string
         summary:
-          type: string
-        feedName:
           type: string
         duration:
           type: string
@@ -198,4 +203,6 @@ components:
         isSaved:
           type: boolean
         content:
+          type: string
+        date:
           type: string
