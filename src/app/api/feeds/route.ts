@@ -1,4 +1,4 @@
-import { feeds } from "@/models/mongo";
+import { getFeeds } from "@/models/feeds";
 import { Feed } from "@/types";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
  * @returns A list of all feed sources
  */
 export async function GET(request: NextRequest) {
-  const feeds: Feed[] = [];
+  const feeds = await getFeeds();
   return NextResponse.json(
     {
       feeds,

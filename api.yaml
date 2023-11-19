@@ -4,7 +4,8 @@ info:
   description: This is an internal authenticated API for managing Lit Feed feeds and articles. This API is meant to be used by the different implementations of the Lit Feed frontend applications.
   version: 1.0.0
 servers:
-  - url: http://localhost:3000
+  - url: http://localhost:3000/api
+    description: Local server
 paths:
   /feeds:
     get:
