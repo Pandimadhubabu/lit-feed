@@ -75,4 +75,6 @@ export function objectToMongo(object: Identifiable) {
   };
 
   delete (mongoObject as any).id;
+
+  return mongoObject;
 }
