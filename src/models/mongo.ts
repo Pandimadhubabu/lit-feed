@@ -3,7 +3,7 @@ import {
   feedDatabaseName,
   feedsCollectionName,
   mongoUrl,
-} from "@/app/api/config";
+} from "@/app/api/mongoConfig";
 import { MongoDocument, Identifiable } from "@/types";
 import { MongoClient, ObjectId } from "mongodb";
 

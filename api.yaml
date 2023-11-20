@@ -73,12 +73,8 @@ paths:
             schema:
               $ref: "#/components/schemas/Feed"
       responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Feed"
+        "204":
+          description: No Content
     delete:
       summary: Delete a feed
       description: Delete a feed
@@ -90,12 +86,9 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Feed"
+        "204":
+          description: No Content
+
   /feeds/{feedId}/articles:
     get:
       summary: Get all articles from a feed

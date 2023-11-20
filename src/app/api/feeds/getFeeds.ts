@@ -1,10 +1,11 @@
-import { getFeeds as getFeedsModel } from "@/models/feeds";
+import * as feedModels from "@/models/feeds";
 
 export async function getFeeds() {
-  const feeds = await getFeedsModel();
+  const feeds = await feedModels.getFeeds();
 
   return {
-    data: feeds,
+    message: "Feeds retrieved",
     status: 200,
+    data: feeds,
   };
 }

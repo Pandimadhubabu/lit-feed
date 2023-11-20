@@ -1,17 +1,19 @@
-import { debug } from "@/app/api/logger";
+import { logDebug } from "@/app/api/logger";
 import { Feed } from "@/types";
 import { feeds, mongoToObject, objectToMongo } from "../mongo";
+import { ObjectId } from "mongodb";
+import { NotFoundError } from "@/app/api/errors";
 
 export async function getFeeds(): Promise<Feed[]> {
   const feedsCollection = await feeds();
 
   const mongoResult = await feedsCollection.find().toArray();
 
-  debug({ mongoResult }, "mongoResult");
+  logDebug({ mongoResult }, "mongoResult");
 
   const feedsList = mongoResult.map(mongoToObject<Feed>);
 
-  debug({ feedsList }, "feedsList");
+  logDebug({ feedsList }, "feedsList");
 
   return feedsList;
 }
@@ -21,41 +23,47 @@ export async function addFeed(feed: Feed) {
 
   const { insertedId } = await feedsCollection.insertOne(feed);
 
-  debug({ insertedId }, "mongoResult");
+  logDebug({ insertedId }, "mongoResult");
 
   const feedResult = mongoToObject<Feed>({
     ...feed,
     _id: insertedId,
   });
-  debug({ feedResult }, "addFeed result");
+
+  logDebug({ feedResult }, "addFeed result");
 
   return feedResult;
 }
 
-export async function updateFeed(feed: Feed) {
+export async function updateFeed(feed: Feed, id: Feed["id"]) {
   const feedsCollection = await feeds();
 
-  const mongoResult = await feedsCollection.updateOne(objectToMongo(feed), {
-    $set: feed,
+  const mongoResult = await feedsCollection.updateOne(
+    {
+      _id: new ObjectId(id),
+    },
+    {
+      $set: feed,
+    },
+  );
+
+  logDebug({ mongoResult }, "mongoResult");
+
+  if (!mongoResult.matchedCount) {
+    throw new NotFoundError("No feed found to update", { id });
+  }
+}
+
+export async function deleteFeed(id: Feed["id"]) {
+  const feedsCollection = await feeds();
+
+  const mongoResult = await feedsCollection.deleteOne({
+    _id: new ObjectId(id),
   });
 
-  debug({ mongoResult }, "mongoResult");
+  logDebug({ mongoResult }, "mongoResult");
 
-  const feedResult = mongoToObject<Feed>(mongoResult);
-  debug({ feedResult }, "updateFeed result");
-
-  return feedResult;
-}
-
-export async function deleteFeed(feed: Feed) {
-  const feedsCollection = await feeds();
-
-  const mongoResult = await feedsCollection.deleteOne(objectToMongo(feed));
-
-  debug({ mongoResult }, "mongoResult");
-
-  const feedResult = mongoToObject<Feed>(mongoResult);
-  debug({ feedResult }, "deleteFeed result");
-
-  return feedResult;
+  if (!mongoResult.deletedCount) {
+    throw new NotFoundError("No feed found to delete", { id });
+  }
 }

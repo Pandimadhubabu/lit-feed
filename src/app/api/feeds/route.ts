@@ -1,5 +1,5 @@
 import { toNextEndpoint } from "../next";
-import { addNewFeed } from "./addNewFeed";
+import { addFeed } from "./addFeed";
 import { getFeeds } from "./getFeeds";
 
 /**
@@ -14,4 +14,4 @@ export const GET = toNextEndpoint(getFeeds);
  * @param body The feed to add
  * @returns The added feed
  */
-export const POST = toNextEndpoint(addNewFeed);
+export const POST = toNextEndpoint(addFeed);
