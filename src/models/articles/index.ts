@@ -1,4 +1,4 @@
-import { debug } from "@/logger";
+import { debug } from "@/app/api/logger";
 import { Article, Feed } from "@/types";
 import { articles, mongoToObject, objectToMongo } from "../mongo";
 

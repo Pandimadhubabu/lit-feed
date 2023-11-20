@@ -3,7 +3,7 @@ import {
   feedDatabaseName,
   feedsCollectionName,
   mongoUrl,
-} from "@/config";
+} from "@/app/api/config";
 import { MongoDocument, Identifiable } from "@/types";
 import { MongoClient, ObjectId } from "mongodb";
 
@@ -55,18 +55,24 @@ export async function articles() {
 export function mongoToObject<T>(mongoResult: unknown): T {
   const resultTyped = mongoResult as MongoDocument;
 
-  return {
-    id: resultTyped._id.toString(),
+  const result = {
     ...resultTyped,
-  } as T;
+    id: resultTyped._id.toString(),
+  };
+
+  delete (result as any)._id;
+
+  return result as T;
 }
 
 /**
  * Converts a typed object to a MongoDB object
  */
 export function objectToMongo(object: Identifiable) {
-  return {
-    _id: new ObjectId(object.id),
+  const mongoObject = {
     ...object,
+    _id: new ObjectId(object.id),
   };
+
+  delete (mongoObject as any).id;
 }

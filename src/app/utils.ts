@@ -1,4 +1,4 @@
-import { Feed } from "./types";
+import { Feed } from "../types";
 export function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }

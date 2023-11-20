@@ -1,4 +1,4 @@
-import { debug } from "@/logger";
+import { debug } from "@/app/api/logger";
 import { Feed } from "@/types";
 import { feeds, mongoToObject, objectToMongo } from "../mongo";
 
@@ -19,11 +19,14 @@ export async function getFeeds(): Promise<Feed[]> {
 export async function addFeed(feed: Feed) {
   const feedsCollection = await feeds();
 
-  const mongoResult = await feedsCollection.insertOne(feed);
+  const { insertedId } = await feedsCollection.insertOne(feed);
 
-  debug({ mongoResult }, "mongoResult");
+  debug({ insertedId }, "mongoResult");
 
-  const feedResult = mongoToObject<Feed>((mongoResult as any).ops[0]);
+  const feedResult = mongoToObject<Feed>({
+    ...feed,
+    _id: insertedId,
+  });
   debug({ feedResult }, "addFeed result");
 
   return feedResult;

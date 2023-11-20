@@ -1,20 +1,17 @@
-import { getFeeds } from "@/models/feeds";
-import { Feed } from "@/types";
-import { NextRequest, NextResponse } from "next/server";
+import { toNextEndpoint } from "../next";
+import { addNewFeed } from "./addNewFeed";
+import { getFeeds } from "./getFeeds";
 
 /**
  * Returns a list of all feed sources
- * @param request Ignored
+ * @param body Unused
  * @returns A list of all feed sources
  */
-export async function GET(request: NextRequest) {
-  const feeds = await getFeeds();
-  return NextResponse.json(
-    {
-      feeds,
-    },
-    {
-      status: 200,
-    },
-  );
-}
+export const GET = toNextEndpoint(getFeeds);
+
+/**
+ * Adds a new feed
+ * @param body The feed to add
+ * @returns The added feed
+ */
+export const POST = toNextEndpoint(addNewFeed);
