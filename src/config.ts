@@ -10,3 +10,4 @@ export const feedsCollectionName =
   process.env.MONGO_FEEDS_COLLECTION_NAME || "feeds";
 export const articlesCollectionName =
   process.env.MONGO_ARTICLES_COLLECTION_NAME || "articles";
+export const logLevel = process.env.LOG_LEVEL || "info";

@@ -1,6 +1,6 @@
-import { logger } from "@/utils";
-import { articles, mongoToObject, objectToMongo } from "../mongo";
+import { debug } from "@/logger";
 import { Article, Feed } from "@/types";
+import { articles, mongoToObject, objectToMongo } from "../mongo";
 
 export async function getAllArticles(feed: Feed): Promise<Article[]> {
   const articlesCollection = await articles();
@@ -11,11 +11,11 @@ export async function getAllArticles(feed: Feed): Promise<Article[]> {
     })
     .toArray();
 
-  logger.debug("mongoResult", mongoResult);
+  debug({ mongoResult }, "mongoResult");
 
   const articlesList = mongoResult.map(mongoToObject<Article>);
 
-  logger.debug("articlesList", articlesList);
+  debug({ articlesList }, "articlesList");
 
   return articlesList;
 }
@@ -29,11 +29,11 @@ export async function getArticle(articleId: Article["id"]): Promise<Article> {
     }),
   );
 
-  logger.debug("mongoResult", mongoResult);
+  debug({ mongoResult }, "mongoResult");
 
   const article = mongoToObject<Article>(mongoResult);
 
-  logger.debug("article", article);
+  debug({ article }, "article");
 
   return article;
 }
@@ -48,10 +48,10 @@ export async function updateArticle(article: Article) {
     },
   );
 
-  logger.debug("mongoResult", mongoResult);
+  debug({ mongoResult }, "mongoResult");
 
   const articleResult = mongoToObject<Article>(mongoResult);
-  logger.debug("updateArticle result", articleResult);
+  debug({ articleResult }, "updateArticle result");
 
   return articleResult;
 }

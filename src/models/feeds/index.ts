@@ -1,5 +1,5 @@
+import { debug } from "@/logger";
 import { Feed } from "@/types";
-import { logger } from "@/utils";
 import { feeds, mongoToObject, objectToMongo } from "../mongo";
 
 export async function getFeeds(): Promise<Feed[]> {
@@ -7,11 +7,11 @@ export async function getFeeds(): Promise<Feed[]> {
 
   const mongoResult = await feedsCollection.find().toArray();
 
-  logger.debug("mongoResult", mongoResult);
+  debug({ mongoResult }, "mongoResult");
 
   const feedsList = mongoResult.map(mongoToObject<Feed>);
 
-  logger.debug("feedsList", feedsList);
+  debug({ feedsList }, "feedsList");
 
   return feedsList;
 }
@@ -21,10 +21,10 @@ export async function addFeed(feed: Feed) {
 
   const mongoResult = await feedsCollection.insertOne(feed);
 
-  logger.debug("mongoResult", mongoResult);
+  debug({ mongoResult }, "mongoResult");
 
   const feedResult = mongoToObject<Feed>((mongoResult as any).ops[0]);
-  logger.debug("addFeed result", feedResult);
+  debug({ feedResult }, "addFeed result");
 
   return feedResult;
 }
@@ -36,10 +36,10 @@ export async function updateFeed(feed: Feed) {
     $set: feed,
   });
 
-  logger.debug("mongoResult", mongoResult);
+  debug({ mongoResult }, "mongoResult");
 
   const feedResult = mongoToObject<Feed>(mongoResult);
-  logger.debug("updateFeed result", feedResult);
+  debug({ feedResult }, "updateFeed result");
 
   return feedResult;
 }
@@ -49,10 +49,10 @@ export async function deleteFeed(feed: Feed) {
 
   const mongoResult = await feedsCollection.deleteOne(objectToMongo(feed));
 
-  logger.debug("mongoResult", mongoResult);
+  debug({ mongoResult }, "mongoResult");
 
   const feedResult = mongoToObject<Feed>(mongoResult);
-  logger.debug("deleteFeed result", feedResult);
+  debug({ feedResult }, "deleteFeed result");
 
   return feedResult;
 }
