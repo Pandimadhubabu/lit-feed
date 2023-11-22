@@ -44,7 +44,7 @@ export function toNextEndpoint<T extends (request: any) => any>(fn: T) {
   );
 }
 
-function paramsToObject(params: NextRequest["nextUrl"]["searchParams"]) {
+export function paramsToObject(params: NextRequest["nextUrl"]["searchParams"]) {
   const result: Record<string, unknown> = {};
   for (const [key, value] of params.entries()) {
     result[key] = value;
@@ -54,7 +54,7 @@ function paramsToObject(params: NextRequest["nextUrl"]["searchParams"]) {
 
 // TODO: Add response validation
 // TODO: Distinguish between malformed JSON and no body
-async function parseBody(request: NextRequest) {
+export async function parseBody(request: NextRequest) {
   try {
     return await request.json();
   } catch {
