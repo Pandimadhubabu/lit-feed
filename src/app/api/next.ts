@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { logError } from "./logger";
+import * as logger from "./logger";
 import { GenericError } from "./errors";
 import { HttpResponse } from "./types";
 
@@ -46,7 +46,7 @@ export async function toNextResponse<T extends (request: any) => HttpResponse>(
       );
     }
 
-    logError({ error }, "Error while handling request");
+    logger.error({ error }, "Error while handling request");
     return NextResponse.json(
       {
         error,

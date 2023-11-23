@@ -1,4 +1,4 @@
-import { logDebug } from "@/app/api/logger";
+import { debug } from "@/app/api/logger";
 import { Article, Feed } from "@/types";
 import { articles, mongoToObject, objectToMongo } from "../mongo";
 
@@ -11,11 +11,11 @@ export async function getAllArticles(feed: Feed): Promise<Article[]> {
     })
     .toArray();
 
-  logDebug({ mongoResult }, "mongoResult");
+  debug({ mongoResult }, "mongoResult");
 
   const articlesList = mongoResult.map(mongoToObject<Article>);
 
-  logDebug({ articlesList }, "articlesList");
+  debug({ articlesList }, "articlesList");
 
   return articlesList;
 }
@@ -29,11 +29,11 @@ export async function getArticle(articleId: Article["id"]): Promise<Article> {
     }),
   );
 
-  logDebug({ mongoResult }, "mongoResult");
+  debug({ mongoResult }, "mongoResult");
 
   const article = mongoToObject<Article>(mongoResult);
 
-  logDebug({ article }, "article");
+  debug({ article }, "article");
 
   return article;
 }
@@ -48,10 +48,10 @@ export async function updateArticle(article: Article) {
     },
   );
 
-  logDebug({ mongoResult }, "mongoResult");
+  debug({ mongoResult }, "mongoResult");
 
   const articleResult = mongoToObject<Article>(mongoResult);
-  logDebug({ articleResult }, "updateArticle result");
+  debug({ articleResult }, "updateArticle result");
 
   return articleResult;
 }
