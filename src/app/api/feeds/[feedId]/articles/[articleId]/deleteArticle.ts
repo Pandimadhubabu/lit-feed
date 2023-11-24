@@ -1,4 +1,4 @@
-import * as articlesModel from "@/models/articles";
+import * as articlesModel from "@/app/api/models/articles";
 
 export async function deleteArticle({
   params: { articleId },

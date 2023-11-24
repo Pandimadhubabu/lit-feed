@@ -3,7 +3,7 @@ import { getArticles } from "../../feeds/[feedId]/articles/getArticles";
 import { deleteFeed } from "../../feeds/[feedId]/deleteFeed";
 import { getFeeds } from "../../feeds/getFeeds";
 import { deleteArticle } from "../../feeds/[feedId]/articles/[articleId]/deleteArticle";
-import { testArticles, testFeeds } from "@/models/testData";
+import { testArticles, testFeeds } from "@/app/api/models/testData";
 import { addArticle } from "../../feeds/[feedId]/articles/addArticle";
 import { omit } from "../../utils";
 import { addFeed } from "../../feeds/addFeed";

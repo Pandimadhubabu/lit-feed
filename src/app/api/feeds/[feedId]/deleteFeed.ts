@@ -1,4 +1,4 @@
-import * as feedModels from "@/models/feeds";
+import * as feedModels from "@/app/api/models/feeds";
 import { Feed } from "@/types";
 
 export async function deleteFeed({

@@ -1,4 +1,4 @@
-import { testFeeds } from "@/models/testData";
+import { testFeeds } from "@/app/api/models/testData";
 import { Feed } from "@/types";
 import { omit } from "../../utils";
 import { getFeeds } from "../../feeds/getFeeds";

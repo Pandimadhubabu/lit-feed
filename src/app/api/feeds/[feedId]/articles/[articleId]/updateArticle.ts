@@ -1,4 +1,4 @@
-import * as articlesModel from "@/models/articles";
+import * as articlesModel from "@/app/api/models/articles";
 import { Article } from "@/types";
 
 export async function updateArticle({
