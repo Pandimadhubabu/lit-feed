@@ -89,82 +89,86 @@ export default function Home() {
       )}
 
       {/* Main content */}
-      <aside className="dark:bg-gray-800 bg-gray-400 lg:fixed lg:bottom-0 lg:left-0 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5 xl:left-auto">
-        <ul role="list" className="divide-y divide-white/5">
-          {articles.map((article, index) => (
-            <li
-              key={article.href}
-              className={
-                (selectedArticle === index
-                  ? "dark:bg-gray-600 bg-gray-700"
-                  : `${
-                      index % 2 === 0
-                        ? "dark:bg-gray-800 bg-gray-100"
-                        : "dark:bg-gray-700 bg-gray-300"
-                    }`) + " px-4 py-4 sm:px-6 lg:px-8 cursor-pointer"
-              }
-              onClick={() => {
-                setArticleOpen(true);
-                setSelectedArticle(index);
-              }}
-            >
-              <div className="flex items-center flex-col gap-x-3">
-                <h3
-                  className={
-                    (selectedArticle === index
-                      ? "text-white"
-                      : "dark:text-white text-black") +
-                    " flex-auto w-full truncate text-sm font-semibold leading-6"
-                  }
-                >
-                  {article.title}
-                </h3>
-                <p
-                  id="description"
-                  className={
-                    (selectedArticle === index
-                      ? "text-gray-400"
-                      : "dark:text-gray-400 text-gray-800") +
-                    " flex-auto w-full truncate text-xs"
-                  }
-                >
-                  {article.summary}
-                </p>
-              </div>
-              <p
+      {isLoadingArticles ? (
+        <Loading />
+      ) : (
+        <aside className="dark:bg-gray-800 bg-gray-400 lg:fixed lg:bottom-0 lg:left-0 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-l lg:border-white/5 xl:left-auto">
+          <ul role="list" className="divide-y divide-white/5">
+            {articles.map((article, index) => (
+              <li
+                key={article.href}
                 className={
                   (selectedArticle === index
-                    ? "text-gray-500"
-                    : "dark:text-gray-500 text-gray-800") +
-                  " mt-3 truncate text-sm"
+                    ? "dark:bg-gray-600 bg-gray-700"
+                    : `${
+                        index % 2 === 0
+                          ? "dark:bg-gray-800 bg-gray-100"
+                          : "dark:bg-gray-700 bg-gray-300"
+                      }`) + " px-4 py-4 sm:px-6 lg:px-8 cursor-pointer"
                 }
+                onClick={() => {
+                  setArticleOpen(true);
+                  setSelectedArticle(index);
+                }}
               >
-                Published on{" "}
-                <span
-                  className={
-                    selectedArticle === index
-                      ? "text-gray-400"
-                      : "dark:text-gray-400 text-gray-800"
-                  }
-                >
-                  {article.feedName}
-                </span>
-                <time
-                  dateTime={article.duration}
+                <div className="flex items-center flex-col gap-x-3">
+                  <h3
+                    className={
+                      (selectedArticle === index
+                        ? "text-white"
+                        : "dark:text-white text-black") +
+                      " flex-auto w-full truncate text-sm font-semibold leading-6"
+                    }
+                  >
+                    {article.title}
+                  </h3>
+                  <p
+                    id="description"
+                    className={
+                      (selectedArticle === index
+                        ? "text-gray-400"
+                        : "dark:text-gray-400 text-gray-800") +
+                      " flex-auto w-full truncate text-xs"
+                    }
+                  >
+                    {article.summary}
+                  </p>
+                </div>
+                <p
                   className={
                     (selectedArticle === index
-                      ? "text-gray-600"
-                      : "dark:text-gray-600 text-gray-900") +
-                    " flex-none text-xs m-2"
+                      ? "text-gray-500"
+                      : "dark:text-gray-500 text-gray-800") +
+                    " mt-3 truncate text-sm"
                   }
                 >
-                  {article.date}
-                </time>
-              </p>
-            </li>
-          ))}
-        </ul>
-      </aside>
+                  Published on{" "}
+                  <span
+                    className={
+                      selectedArticle === index
+                        ? "text-gray-400"
+                        : "dark:text-gray-400 text-gray-800"
+                    }
+                  >
+                    {article.feedName}
+                  </span>
+                  <time
+                    dateTime={article.duration}
+                    className={
+                      (selectedArticle === index
+                        ? "text-gray-600"
+                        : "dark:text-gray-600 text-gray-900") +
+                      " flex-none text-xs m-2"
+                    }
+                  >
+                    {article.date}
+                  </time>
+                </p>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
       <main className="hidden w-full h-full lg:block lg:fixed lg:left-96 xl:left-[42rem]">
         {isLoadingArticles ? (
           <Loading />
