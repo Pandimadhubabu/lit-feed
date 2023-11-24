@@ -1,6 +1,6 @@
 // index.test.ts
 import { testArticles, testFeeds } from "../testData";
-import { getAllArticles, getArticle, updateArticle } from "./index";
+import { getArticles, getArticle, updateArticle, addArticle } from "./index";
 import { Article, Feed } from "@/types";
 
 jest.mock("@/app/api/logger", () => ({
@@ -17,6 +17,10 @@ jest.mock("../mongo", () => ({
     updateOne: jest
       .fn()
       .mockResolvedValue({ matchedCount: 1, modifiedCount: 1 }),
+    insertOne: jest.fn().mockResolvedValue({ insertedId: testArticles[0].id }),
+  }),
+  feeds: jest.fn().mockResolvedValue({
+    findOne: jest.fn().mockResolvedValue(testFeeds[0]),
   }),
   mongoToObject: jest.fn((article) => article),
   objectToMongo: jest.fn((article) => article),
@@ -25,8 +29,15 @@ jest.mock("../mongo", () => ({
 describe("index.ts tests", () => {
   test("getAllArticles should return an array", async () => {
     const feed = testFeeds[0];
-    const articlesList = await getAllArticles(feed);
+    const articlesList = await getArticles(feed.id);
     expect(articlesList).toEqual(testArticles);
+  });
+
+  test("addArticle should return an object", async () => {
+    const feed = testFeeds[0];
+    const article = testArticles[0];
+    const result = await addArticle(article, feed.id);
+    expect(typeof result).toBe("object");
   });
 
   test("getArticle should return an object", async () => {
@@ -37,8 +48,7 @@ describe("index.ts tests", () => {
 
   test("updateArticle should return an object with matchedCount and modifiedCount", async () => {
     const article = testArticles[0];
-    const result = await updateArticle(article);
-    expect(result).toHaveProperty("matchedCount");
-    expect(result).toHaveProperty("modifiedCount");
+    const result = await updateArticle(article, article.id);
+    expect(result).toEqual({ id: article.id });
   });
 });

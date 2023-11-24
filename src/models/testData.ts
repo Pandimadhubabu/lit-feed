@@ -3,13 +3,13 @@ import { Article, Feed } from "@/types";
 export const testFeeds: Feed[] = [
   {
     href: "https://www.reddit.com/r/programming/.rss",
-    id: "1",
+    id: "6520691d42b827145292f2f1",
     name: "programming",
     unread: 0,
   },
   {
     href: "https://www.reddit.com/r/javascript/.rss",
-    id: "2",
+    id: "6520691d42b827145292f2f2",
     name: "javascript",
     unread: 0,
   },
@@ -17,8 +17,8 @@ export const testFeeds: Feed[] = [
 
 export const testArticles: Article[] = [
   {
-    feedId: "1",
-    id: "1",
+    feedId: "6520691d42b827145292f2f1",
+    id: "245f23984f233d32b233f2f1",
     title: "test",
     date: new Date().toISOString(),
     duration: "5 minutes",
@@ -29,8 +29,8 @@ export const testArticles: Article[] = [
     summary: "test",
   },
   {
-    feedId: "2",
-    id: "2",
+    feedId: "6520691d42b827145292f2f1",
+    id: "245f23984f233d32b233f2f2",
     title: "test",
     date: new Date().toISOString(),
     duration: "5 minutes",

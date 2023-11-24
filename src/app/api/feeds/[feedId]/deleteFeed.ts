@@ -2,11 +2,11 @@ import * as feedModels from "@/models/feeds";
 import { Feed } from "@/types";
 
 export async function deleteFeed({
-  params: { id },
+  params: { feedId },
 }: {
-  params: { id: Feed["id"] };
+  params: { feedId: Feed["id"] };
 }) {
-  const data = await feedModels.deleteFeed(id);
+  const data = await feedModels.deleteFeed(feedId);
 
   return {
     status: 200,

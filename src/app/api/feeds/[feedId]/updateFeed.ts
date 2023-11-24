@@ -3,12 +3,12 @@ import { Feed } from "@/types";
 
 export async function updateFeed({
   body,
-  params: { id },
+  params: { feedId },
 }: {
   body: Feed;
-  params: { id: Feed["id"] };
+  params: { feedId: Feed["id"] };
 }) {
-  const data = await feedModels.updateFeed(body, id);
+  const data = await feedModels.updateFeed(body, feedId);
 
   return {
     status: 200,
