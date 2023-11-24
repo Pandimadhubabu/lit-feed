@@ -35,6 +35,26 @@ export async function addFeed(feed: Feed) {
   return feedResult;
 }
 
+export async function getFeed(id: Feed["id"]) {
+  const feedsCollection = await feeds();
+
+  const mongoResult = await feedsCollection.findOne({
+    _id: new ObjectId(id),
+  });
+
+  logger.debug({ mongoResult }, "mongoResult");
+
+  if (!mongoResult) {
+    throw new NotFoundError("No feed found", { id });
+  }
+
+  const feedResult = mongoToObject<Feed>(mongoResult);
+
+  logger.debug({ feedResult }, "getFeed result");
+
+  return feedResult;
+}
+
 export async function updateFeed(feed: Feed, id: Feed["id"]) {
   const feedsCollection = await feeds();
 
@@ -52,6 +72,10 @@ export async function updateFeed(feed: Feed, id: Feed["id"]) {
   if (!mongoResult.matchedCount) {
     throw new NotFoundError("No feed found to update", { id });
   }
+
+  return {
+    id,
+  };
 }
 
 export async function deleteFeed(id: Feed["id"]) {
@@ -66,4 +90,8 @@ export async function deleteFeed(id: Feed["id"]) {
   if (!mongoResult.deletedCount) {
     throw new NotFoundError("No feed found to delete", { id });
   }
+
+  return {
+    id,
+  };
 }

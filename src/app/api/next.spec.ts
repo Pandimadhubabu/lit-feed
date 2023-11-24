@@ -1,11 +1,7 @@
 // next.test.ts
 import { NextRequest, NextResponse } from "next/server";
-import {
-  NextRequestWithParams,
-  toNextEndpoint,
-  toNextResponse,
-  withParams,
-} from "./next";
+import { toNextEndpoint, toNextResponse, withParams } from "./next";
+import { NextRequestWithParams } from "./types";
 jest.mock("next/server", () => {
   const NextResponse = jest.fn();
   (NextResponse as any).json = jest

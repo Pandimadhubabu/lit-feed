@@ -1,18 +1,16 @@
 import * as feedModels from "@/models/feeds";
 import { Feed } from "@/types";
 
-export async function updateFeed({
-  body,
+export async function getFeed({
   params: { id },
 }: {
-  body: Feed;
   params: { id: Feed["id"] };
 }) {
-  const data = await feedModels.updateFeed(body, id);
+  const data = await feedModels.getFeed(id);
 
   return {
     status: 200,
     data,
-    message: "Feed updated",
+    message: "Feed retrieved",
   };
 }

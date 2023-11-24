@@ -6,11 +6,11 @@ export async function deleteFeed({
 }: {
   params: { id: Feed["id"] };
 }) {
-  const deletedFeed = await feedModels.deleteFeed(id);
+  const data = await feedModels.deleteFeed(id);
 
   return {
-    data: deletedFeed,
     status: 200,
+    data,
     message: "Feed deleted",
   };
 }

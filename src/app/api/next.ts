@@ -1,13 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as logger from "./logger";
 import { GenericError } from "./errors";
-import { HttpResponse } from "./types";
+import { HttpResponse, NextRequestWithParams } from "./types";
 
-export type NextRequestWithParams = {
-  body?: Record<string, unknown>;
-  query?: Record<string, unknown>;
-  params?: Record<string, unknown>;
-};
 export function withParams(
   fn: (request: NextRequestWithParams) => Promise<NextResponse>,
 ) {
