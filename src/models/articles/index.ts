@@ -38,7 +38,8 @@ export async function getArticle(articleId: Article["id"]): Promise<Article> {
   return article;
 }
 
-export async function updateArticle(article: Article) {
+export async function updateArticle(originalArticle: Article) {
+  const article = Object.assign({}, originalArticle);
   const articlesCollection = await articles();
 
   const mongoResult = await articlesCollection.updateOne(

@@ -18,7 +18,8 @@ export async function getFeeds(): Promise<Feed[]> {
   return feedsList;
 }
 
-export async function addFeed(feed: Feed) {
+export async function addFeed(originalFeed: Feed) {
+  const feed = Object.assign({}, originalFeed);
   const feedsCollection = await feeds();
 
   const { insertedId } = await feedsCollection.insertOne(feed);
@@ -55,7 +56,8 @@ export async function getFeed(id: Feed["id"]) {
   return feedResult;
 }
 
-export async function updateFeed(feed: Feed, id: Feed["id"]) {
+export async function updateFeed(originalFeed: Feed, id: Feed["id"]) {
+  const feed = Object.assign({}, originalFeed);
   const feedsCollection = await feeds();
 
   const mongoResult = await feedsCollection.updateOne(
