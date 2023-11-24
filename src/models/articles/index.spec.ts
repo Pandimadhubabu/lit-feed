@@ -1,6 +1,12 @@
 // index.test.ts
 import { testArticles, testFeeds } from "../testData";
-import { getArticles, getArticle, updateArticle, addArticle } from "./index";
+import {
+  getArticles,
+  getArticle,
+  updateArticle,
+  addArticle,
+  deleteArticle,
+} from "./index";
 import { Article, Feed } from "@/types";
 
 jest.mock("@/app/api/logger", () => ({
@@ -18,6 +24,7 @@ jest.mock("../mongo", () => ({
       .fn()
       .mockResolvedValue({ matchedCount: 1, modifiedCount: 1 }),
     insertOne: jest.fn().mockResolvedValue({ insertedId: testArticles[0].id }),
+    deleteOne: jest.fn().mockResolvedValue({ deletedCount: 1 }),
   }),
   feeds: jest.fn().mockResolvedValue({
     findOne: jest.fn().mockResolvedValue(testFeeds[0]),
@@ -44,6 +51,12 @@ describe("index.ts tests", () => {
     const articleId: Article["id"] = "testId";
     const article = await getArticle(articleId);
     expect(typeof article).toBe("object");
+  });
+
+  test("deleteArticle should return an id", async () => {
+    const articleId: Article["id"] = testArticles[0].id;
+    const { id } = await deleteArticle(articleId);
+    expect(id).toBe(articleId);
   });
 
   test("updateArticle should return an object with matchedCount and modifiedCount", async () => {

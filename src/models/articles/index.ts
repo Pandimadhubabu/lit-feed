@@ -77,6 +77,24 @@ export async function getArticle(id: Article["id"]): Promise<Article> {
   return article;
 }
 
+export async function deleteArticle(id: Article["id"]) {
+  const articlesCollection = await articles();
+
+  const mongoResult = await articlesCollection.deleteOne({
+    _id: new ObjectId(id),
+  });
+
+  debug({ mongoResult }, "mongoResult");
+
+  if (!mongoResult.deletedCount) {
+    throw new NotFoundError("No article found", { id });
+  }
+
+  return {
+    id,
+  };
+}
+
 export async function updateArticle(
   originalArticle: Article,
   id: Article["id"],
