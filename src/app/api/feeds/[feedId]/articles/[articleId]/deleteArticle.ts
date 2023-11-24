@@ -1,15 +1,15 @@
 import * as articlesModel from "@/models/articles";
 
-export async function getArticle({
+export async function deleteArticle({
   params: { articleId },
 }: {
   params: { articleId: string };
 }) {
-  const data = await articlesModel.getArticle(articleId);
+  const data = await articlesModel.deleteArticle(articleId);
 
   return {
     status: 200,
     data,
-    message: "Article retrieved",
+    message: "Article deleted",
   };
 }

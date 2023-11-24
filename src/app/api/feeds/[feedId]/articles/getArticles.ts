@@ -1,10 +1,10 @@
 import * as articlesModel from "@/models/articles";
 
-export const getArticles = async ({
+export async function getArticles({
   params: { feedId },
 }: {
   params: { feedId: string };
-}) => {
+}) {
   const data = await articlesModel.getArticles(feedId);
 
   return {
@@ -12,4 +12,4 @@ export const getArticles = async ({
     data,
     message: "Articles retrieved",
   };
-};
+}

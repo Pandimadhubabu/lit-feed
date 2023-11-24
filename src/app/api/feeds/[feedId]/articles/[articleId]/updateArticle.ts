@@ -1,13 +1,13 @@
 import * as articlesModel from "@/models/articles";
 import { Article } from "@/types";
 
-export const updateArticle = async ({
+export async function updateArticle({
   body,
   params: { articleId },
 }: {
   body: Article;
   params: { articleId: Article["id"] };
-}) => {
+}) {
   const data = await articlesModel.updateArticle(body, articleId);
 
   return {
@@ -15,4 +15,4 @@ export const updateArticle = async ({
     data,
     message: "Article updated",
   };
-};
+}
