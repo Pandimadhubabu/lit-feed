@@ -4,6 +4,7 @@ module.exports = {
   setupFiles: ['dotenv/config'],
   watchPathIgnorePatterns: ['<rootDir>/.next/'],
   testTimeout: 30000,
+  maxWorkers: 1,
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },

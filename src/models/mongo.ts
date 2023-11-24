@@ -10,8 +10,8 @@ import { MongoClient, ObjectId } from "mongodb";
 const client = new MongoClient(mongoUrl);
 
 let connection: MongoClient;
-// TODO: Add propoer error handling with error types
-async function connectToDatabase(): Promise<MongoClient> {
+// TODO: Add proper error handling with error types
+export async function connectToDatabase(): Promise<MongoClient> {
   if (connection) {
     return connection;
   }
