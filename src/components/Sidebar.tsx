@@ -162,10 +162,10 @@ export function Sidebar() {
                   ))}
             </ul>
           </li>
-          {!isUserLoading ? (
+          {!isUserLoading && user ? (
             <li className="-mx-6 mt-auto">
-              <a
-                href="#"
+              <Link
+                href="/profile"
                 className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
               >
                 {!!user?.picture && (
@@ -177,10 +177,18 @@ export function Sidebar() {
                 )}
                 <span className="sr-only">Your profile</span>
                 <span aria-hidden="true">{user?.nickname}</span>
-              </a>
+              </Link>
             </li>
           ) : (
-            <></>
+            <li className="-mx-6 mt-auto">
+              <a
+                href="/api/auth/login"
+                className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
+              >
+                <span className="sr-only">Login</span>
+                <span aria-hidden="true">Login</span>
+              </a>
+            </li>
           )}
         </ul>
       </nav>
