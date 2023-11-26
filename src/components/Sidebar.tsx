@@ -1,7 +1,6 @@
 import { classNames, getFeedLink } from "@/app/utils";
 import { useFeeds } from "@/hooks/useFeeds";
 import { usePath } from "@/hooks/usePath";
-import { useSegments } from "@/hooks/useSegments";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Cog6ToothIcon,
@@ -22,7 +21,6 @@ const navigation = [
 export function Sidebar() {
   const { user, isLoading: isUserLoading, error: userError } = useUser();
   const { feeds, isLoading: isFeedLoading, error: feedError } = useFeeds();
-  const [segmentName, feedId] = useSegments();
   const path = usePath();
   const [selectedNavigation, setSelectedNavigation] = useState(0);
   const [selectedFeed, setSelectedFeed] = useState(0);

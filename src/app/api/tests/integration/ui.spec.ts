@@ -8,8 +8,9 @@ import { getFeeds } from "../../feeds/getFeeds";
 import * as logger from "../../logger";
 
 describe("article lifecycle tests", () => {
-  const feedIds: string[] = [];
   test("should create test data for testing the UI", async () => {
+    const feedIds: string[] = [];
+    const feedNames: string[] = [];
     // Get all feeds
     const { data: allFeeds } = await getFeeds();
 
@@ -83,6 +84,7 @@ describe("article lifecycle tests", () => {
       });
       logger.info({ data }, message);
       feedIds.push(data.id);
+      feedNames.push(data.name);
     }
 
     const articles = [
@@ -115,7 +117,11 @@ describe("article lifecycle tests", () => {
     for (const feedId of feedIds) {
       for (const article of articles) {
         const { data, message } = await addArticle({
-          body: article,
+          body: {
+            ...article,
+            feedId,
+            feedName: feedNames[feedIds.indexOf(feedId)],
+          },
           params: {
             feedId,
           },

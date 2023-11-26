@@ -2,15 +2,18 @@ import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
 import "@/globals.css";
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  Cog6ToothIcon,
-  Square3Stack3DIcon,
-  StarIcon,
-  XMarkIcon,
-} from "@heroicons/react/20/solid";
+import { XMarkIcon } from "@heroicons/react/20/solid";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Fragment, ReactNode, useState } from "react";
+import {
+  Context,
+  Dispatch,
+  Fragment,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useState,
+} from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -18,13 +21,13 @@ export const metadata: Metadata = {
   description: "Yet another feed reader",
 };
 
-const navigation = [
-  { name: "Articles", link: "/", icon: Square3Stack3DIcon },
-  { name: "Saved", link: "/saved", icon: StarIcon },
-  { name: "Settings", link: "/settings", icon: Cog6ToothIcon },
-];
-
-export default function Shell({ children }: { children: ReactNode }) {
+export default function Shell({
+  children,
+  headerTitle,
+}: {
+  children: ReactNode;
+  headerTitle: string;
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div>
@@ -87,8 +90,7 @@ export default function Shell({ children }: { children: ReactNode }) {
           </div>
         </Dialog>
       </Transition.Root>
-
-      <Header setSidebarOpen={setSidebarOpen} />
+      <Header headerTitle={headerTitle} setSidebarOpen={setSidebarOpen} />
 
       {/* Static sidebar for desktop */}
       <div className="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col">
