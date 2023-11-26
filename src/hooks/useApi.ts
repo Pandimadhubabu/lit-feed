@@ -1,19 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
-export function useApi({
-  path,
-  options,
-  setData,
-  setIsLoading,
-  setError,
-}: {
-  path: string;
-  options?: RequestInit;
-  setData: (data: any) => void;
-  setIsLoading: (isLoading: boolean) => void;
-  setError: (error: Error | null) => void;
-}) {
-  useEffect(() => {
+export function useApi(
+  arg: {
+    path: string;
+    options?: RequestInit;
+    setData: (data: any) => void;
+    setIsLoading: (isLoading: boolean) => void;
+    setError: (error: Error | null) => void;
+  },
+  required: any[],
+) {
+  const { path, options, setData, setIsLoading, setError } = arg;
+  useMemo(() => {
+    if (required.length !== 0 && !required.every((r) => r)) {
+      return;
+    }
     fetch(path, options)
       .then((response) => {
         if (!response.ok) {
@@ -34,5 +35,5 @@ export function useApi({
         setError(error);
         setIsLoading(false);
       });
-  }, [options, path]);
+  }, [path, ...required]);
 }

@@ -1,7 +1,7 @@
+import { classNames, getFeedLink } from "@/app/utils";
 import { useFeeds } from "@/hooks/useFeeds";
 import { usePath } from "@/hooks/usePath";
 import { useSegments } from "@/hooks/useSegments";
-import { classNames, getFeedLink } from "@/app/utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   Cog6ToothIcon,

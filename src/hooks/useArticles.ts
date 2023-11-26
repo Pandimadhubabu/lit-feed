@@ -7,12 +7,15 @@ export function useArticles({ feedId }: { feedId?: string }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useApi({
-    path: `/api/feeds/${feedId}/articles`,
-    setData: setArticles,
-    setIsLoading,
-    setError,
-  });
+  useApi(
+    {
+      path: `/api/feeds/${feedId}/articles`,
+      setData: setArticles,
+      setIsLoading,
+      setError,
+    },
+    [feedId],
+  );
 
   return {
     articles,

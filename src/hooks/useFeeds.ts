@@ -7,12 +7,15 @@ export function useFeeds() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useApi({
-    path: "/api/feeds",
-    setData: setFeeds,
-    setIsLoading,
-    setError,
-  });
+  useApi(
+    {
+      path: "/api/feeds",
+      setData: setFeeds,
+      setIsLoading,
+      setError,
+    },
+    [],
+  );
   return {
     feeds,
     isLoading,
