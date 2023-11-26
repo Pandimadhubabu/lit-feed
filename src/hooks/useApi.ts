@@ -18,6 +18,9 @@ export function useApi(
     fetch(path, options)
       .then((response) => {
         if (!response.ok) {
+          if (response.status === 401) {
+            window.location.href = "/api/auth/login";
+          }
           throw new Error(
             `Error! code: ${response.status}, message: ${response.statusText}`,
           );
