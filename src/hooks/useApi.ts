@@ -27,7 +27,6 @@ export function useApi(
       .then((response) => response.json())
       .then((result) => {
         const { data, message } = result;
-        console.log(message);
         setData(data);
         setIsLoading(false);
       })
@@ -35,5 +34,5 @@ export function useApi(
         setError(error);
         setIsLoading(false);
       });
-  }, [path, ...required]);
+  }, [path]);
 }
