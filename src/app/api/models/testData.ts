@@ -1,4 +1,5 @@
 import { Article, Feed } from "@/types";
+import { OauthClaims, User } from "../types";
 
 export const testFeeds: Feed[] = [
   {
@@ -41,3 +42,25 @@ export const testArticles: Article[] = [
     summary: "test",
   },
 ];
+
+export const testUser: User = {
+  email: "test@example.com",
+  name: "Test User",
+  picture: "https://example.com/test.jpg",
+  id: "245f23984f234d32b233f2f2",
+  oauthId: "OAUTH_ID",
+  isEmailVerified: true,
+  nickname: "test",
+  updatedAt: "2020-01-01T00:00:00.000Z",
+};
+
+export const testClaims: OauthClaims = {
+  email: testUser.email,
+  email_verified: "true",
+  name: testUser.name,
+  nickname: testUser.nickname,
+  picture: testUser.picture,
+  sid: "SESSION_ID",
+  sub: testUser.oauthId,
+  updated_at: testUser.updatedAt,
+};
