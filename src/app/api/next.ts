@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as logger from "./logger";
 import { GenericError } from "./errors";
-import { HttpResponse, NextRequestWithParams, User } from "./types";
+import { HttpResponse, NextRequestWithParams, OauthClaims } from "./types";
 import { getSession } from "@auth0/nextjs-auth0";
 
 export function withParams(
@@ -21,7 +21,7 @@ export function withParams(
 }
 
 export async function toNextResponse<
-  T extends (request: any, user: User) => HttpResponse,
+  T extends (request: any, oauthClaims: OauthClaims) => HttpResponse,
 >(request: NextRequestWithParams, fn: T) {
   const session = await getSession();
   if (!session) {
@@ -38,7 +38,7 @@ export async function toNextResponse<
   }
   let response: HttpResponse;
   try {
-    response = await fn(request, session.user as User);
+    response = await fn(request, session.user as OauthClaims);
   } catch (error: unknown) {
     if (error instanceof GenericError) {
       return NextResponse.json(

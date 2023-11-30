@@ -12,7 +12,7 @@ export type NextRequestWithParams = {
   params?: Record<string, unknown>;
 };
 
-export interface User {
+export interface OauthClaims {
   nickname: string;
   name: string;
   picture: string;
