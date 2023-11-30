@@ -1,11 +1,5 @@
-// index.test.ts
 import { testFeeds } from "../testData";
-import { getFeeds, addFeed } from "./index";
-import { Feed } from "@/types";
-
-jest.mock("@/app/api/logger", () => ({
-  debug: jest.fn(),
-}));
+import { addFeed, getFeeds } from "./index";
 
 jest.mock("../mongo", () => ({
   feeds: jest.fn().mockResolvedValue({
