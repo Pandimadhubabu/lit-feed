@@ -1,7 +1,22 @@
-// next.test.ts
 import { NextRequest, NextResponse } from "next/server";
 import { toNextEndpoint, toNextResponse, withParams } from "./next";
 import { NextRequestWithParams } from "./types";
+
+jest.mock("@auth0/nextjs-auth0", () => ({
+  getSession: jest.fn().mockResolvedValue({
+    user: {
+      email: "test@example.com",
+      name: "Test User",
+      picture: "https://example.com/test.jpg",
+      id: "245f23984f234d32b233f2f2",
+      oauthId: "OAUTH_ID",
+      isEmailVerified: true,
+      nickname: "test",
+      updatedAt: "2020-01-01T00:00:00.000Z",
+    },
+  }),
+}));
+
 jest.mock("next/server", () => {
   const NextResponse = jest.fn();
   (NextResponse as any).json = jest
