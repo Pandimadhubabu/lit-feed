@@ -1,7 +1,5 @@
 if (!process.env.MONGO_URL) {
-  throw new Error(
-    "Please define the MONGO_URL environment variable inside .env.local",
-  );
+  throw new Error("Please define the MONGO_URL environment variable");
 }
 
 export const mongoUrl = process.env.MONGO_URL;
