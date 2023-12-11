@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[` 1`] = `"Feed deleted"`;
+
+exports[`article lifecycle tests should be able to add a new article 1`] = `"Performed create on Articles successfully"`;
+
+exports[`article lifecycle tests should be able to add a second article 1`] = `"Performed create on Articles successfully"`;
+
 exports[`article lifecycle tests should be able to delete a second article 1`] = `"No article found"`;
 
-exports[`article lifecycle tests should be able to get all articles after delete 1`] = `"No article found"`;
+exports[`article lifecycle tests should be able to delete a second article 2`] = `"No article found"`;
+
+exports[`article lifecycle tests should be able to delete a second article 3`] = `"Performed delete on Articles successfully"`;
+
+exports[`article lifecycle tests should be able to delete an article 1`] = `"Performed delete on Articles successfully"`;
+
+exports[`article lifecycle tests should be able to get all articles 1`] = `"Performed getAll on Articles successfully"`;
+
+exports[`article lifecycle tests should be able to get all articles after delete 1`] = `"Performed getAll on Articles successfully"`;
+
+exports[`article lifecycle tests should be able to get all articles after delete 2`] = `"Performed getAll on Articles successfully"`;

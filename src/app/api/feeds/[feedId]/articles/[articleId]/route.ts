@@ -1,7 +1,6 @@
+import { createHandler } from "@/app/api/createHandler";
+import { Articles } from "@/app/api/models/articles";
 import { toNextEndpoint } from "@/app/api/next";
-import { getArticle } from "./getArticle";
-import { updateArticle } from "./updateArticle";
-import { deleteArticle } from "./deleteArticle";
 
 /**
  * Get an article by Id
@@ -9,7 +8,7 @@ import { deleteArticle } from "./deleteArticle";
  * @param {string} articleId
  * @returns An article
  */
-export const GET = toNextEndpoint(getArticle);
+export const GET = toNextEndpoint(createHandler(Articles, "get"));
 
 /**
  * Updates an article by Id
@@ -17,7 +16,7 @@ export const GET = toNextEndpoint(getArticle);
  * @param {string} articleId
  * @returns The ID of the updated article
  */
-export const PATCH = toNextEndpoint(updateArticle);
+export const PATCH = toNextEndpoint(createHandler(Articles, "update"));
 
 /**
  * Deletes an article by Id
@@ -25,4 +24,4 @@ export const PATCH = toNextEndpoint(updateArticle);
  * @param {string} articleId
  * @returns The ID of the deleted article
  */
-export const DELETE = toNextEndpoint(deleteArticle);
+export const DELETE = toNextEndpoint(createHandler(Articles, "delete"));

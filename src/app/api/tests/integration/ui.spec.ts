@@ -1,14 +1,16 @@
 import { Article, Feed } from "@/types";
-import { deleteArticle } from "../../feeds/[feedId]/articles/[articleId]/deleteArticle";
-import { addArticle } from "../../feeds/[feedId]/articles/addArticle";
-import { getArticles } from "../../feeds/[feedId]/articles/getArticles";
+import { createHandler } from "../../createHandler";
 import { deleteFeed } from "../../feeds/[feedId]/deleteFeed";
 import { addFeed } from "../../feeds/addFeed";
 import { getFeeds } from "../../feeds/getFeeds";
 import * as logger from "../../logger";
+import { Articles } from "../../models/articles";
 import { getLocalhostUser } from "../../next";
 
 const user = getLocalhostUser();
+const getArticles = createHandler(Articles, "getAll");
+const deleteArticle = createHandler(Articles, "delete");
+const createArticle = createHandler(Articles, "create");
 
 describe("article lifecycle tests", () => {
   test("should create test data for testing the UI", async () => {
@@ -38,12 +40,12 @@ describe("article lifecycle tests", () => {
       allArticles.map(async (article: Article) => {
         const { data, message } = await deleteArticle({
           params: {
-            articleId: article.id,
+            id: article.id,
           },
           user,
         });
 
-        expect(message).toBe("Article deleted");
+        expect(message).toBe("Performed delete on Articles successfully");
         expect(data.id).toBe(article.id);
       }),
     );
@@ -121,7 +123,7 @@ describe("article lifecycle tests", () => {
 
     for (const feedId of feedIds) {
       for (const article of articles) {
-        const { data, message } = await addArticle({
+        const { data, message } = await createArticle({
           body: {
             ...article,
             feedId,
@@ -134,7 +136,7 @@ describe("article lifecycle tests", () => {
         });
 
         logger.info({ data }, message);
-        expect(message).toBe("Article added");
+        expect(message).toBe("Performed create on Articles successfully");
       }
     }
   });

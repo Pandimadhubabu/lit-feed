@@ -1,15 +1,17 @@
 import { Feed, Article } from "@/types";
-import { getArticles } from "../../feeds/[feedId]/articles/getArticles";
 import { deleteFeed } from "../../feeds/[feedId]/deleteFeed";
 import { getFeeds } from "../../feeds/getFeeds";
-import { deleteArticle } from "../../feeds/[feedId]/articles/[articleId]/deleteArticle";
 import { testArticles, testFeeds, testUser } from "@/app/api/models/testData";
-import { addArticle } from "../../feeds/[feedId]/articles/addArticle";
 import { omit } from "../../utils";
 import { addFeed } from "../../feeds/addFeed";
-import { getArticle } from "../../feeds/[feedId]/articles/[articleId]/getArticle";
+import { createHandler } from "../../createHandler";
+import { Articles } from "../../models/articles";
 
 const user = testUser;
+const getArticles = createHandler(Articles, "getAll");
+const getArticle = createHandler(Articles, "get");
+const deleteArticle = createHandler(Articles, "delete");
+const createArticle = createHandler(Articles, "create");
 
 describe("article lifecycle tests", () => {
   let feedId: Feed["id"];
@@ -43,7 +45,7 @@ describe("article lifecycle tests", () => {
           user,
         });
 
-        expect(message).toBe("Article deleted");
+        expect(message).toMatchSnapshot();
         expect(data.id).toBe(article.id);
       }),
     );
@@ -57,7 +59,7 @@ describe("article lifecycle tests", () => {
           },
         });
 
-        expect(message).toBe("Feed deleted");
+        expect(message).toMatchSnapshot();
         expect(data.id).toBe(feed.id);
       }),
     );
@@ -70,7 +72,7 @@ describe("article lifecycle tests", () => {
   });
 
   test("should be able to add a new article", async () => {
-    const { data, message } = await addArticle({
+    const { data, message } = await createArticle({
       body: {
         ...testArticles[0],
         feedId,
@@ -81,7 +83,7 @@ describe("article lifecycle tests", () => {
       user,
     });
 
-    expect(message).toBe("Article added");
+    expect(message).toMatchSnapshot();
     expect(omit(data, ["id", "feedId"])).toEqual(
       omit(testArticles[0], ["id", "feedId"]),
     );
@@ -90,7 +92,7 @@ describe("article lifecycle tests", () => {
   });
 
   test("should be able to add a second article", async () => {
-    const { data, message } = await addArticle({
+    const { data, message } = await createArticle({
       body: {
         ...testArticles[1],
         feedId,
@@ -101,7 +103,7 @@ describe("article lifecycle tests", () => {
       user,
     });
 
-    expect(message).toBe("Article added");
+    expect(message).toMatchSnapshot();
     expect(omit(data, ["id", "feedId"])).toEqual(
       omit(testArticles[1], ["id", "feedId"]),
     );
@@ -117,7 +119,7 @@ describe("article lifecycle tests", () => {
       user,
     });
 
-    expect(message).toBe("Articles retrieved");
+    expect(message).toMatchSnapshot();
     expect(data).toEqual(testArticles);
   });
 
@@ -129,7 +131,7 @@ describe("article lifecycle tests", () => {
       user,
     });
 
-    expect(message).toBe("Article deleted");
+    expect(message).toMatchSnapshot();
     expect(data.id).toBe(testArticles[0].id);
   });
 
@@ -141,7 +143,7 @@ describe("article lifecycle tests", () => {
       user,
     });
 
-    expect(message).toBe("Articles retrieved");
+    expect(message).toMatchSnapshot();
     expect(data).toEqual([testArticles[1]]);
   });
 
@@ -175,7 +177,7 @@ describe("article lifecycle tests", () => {
       user,
     });
 
-    expect(message).toBe("Article deleted");
+    expect(message).toMatchSnapshot();
     expect(data.id).toBe(testArticles[1].id);
   });
 
@@ -187,7 +189,7 @@ describe("article lifecycle tests", () => {
       user,
     });
 
-    expect(message).toBe("Articles retrieved");
+    expect(message).toMatchSnapshot();
     expect(data).toEqual([]);
   });
 });

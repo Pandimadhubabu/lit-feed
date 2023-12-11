@@ -1,13 +1,16 @@
-import { debug } from "@/app/api/logger";
-import { Article, Feed, User } from "@/types";
-import { articles, feeds, mongoToObject, objectToMongo } from "../mongo";
-import { ObjectId } from "mongodb";
 import { NotFoundError } from "@/app/api/errors";
+import { debug } from "@/app/api/logger";
+import { Article, Feed } from "@/types";
+import { ObjectId } from "mongodb";
+import { Repository } from "../Repository";
+import { articles, feeds, mongoToObject, objectToMongo } from "../mongo";
 
-class ArticlesRepository {
-  constructor(private user: User) {}
-
-  async getArticles(feedId: Feed["id"]): Promise<Article[]> {
+export class Articles extends Repository<Article> {
+  async getAll({
+    params: { feedId },
+  }: {
+    params: { feedId: Feed["id"] };
+  }): Promise<Article[]> {
     const articlesCollection = await articles();
 
     const mongoResult = await articlesCollection
@@ -24,8 +27,15 @@ class ArticlesRepository {
 
     return articlesList;
   }
-  async addArticle(originalArticle: Article, feedId: Feed["id"]) {
-    const article = Object.assign({}, originalArticle);
+
+  async create({
+    params: { feedId },
+    body,
+  }: {
+    params: { feedId: Feed["id"] };
+    body: Article;
+  }): Promise<Article> {
+    const article = Object.assign({}, body);
     const feedsCollection = await feeds();
 
     const feed = await feedsCollection.findOne({
@@ -56,19 +66,24 @@ class ArticlesRepository {
 
     return articleResult;
   }
-  async getArticle(id: Article["id"]): Promise<Article> {
+
+  async get({
+    params: { articleId },
+  }: {
+    params: { articleId: Article["id"] };
+  }): Promise<Article> {
     const articlesCollection = await articles();
 
     const mongoResult = await articlesCollection.findOne(
       objectToMongo({
-        id,
+        id: articleId,
       }),
     );
 
     debug({ mongoResult }, "mongoResult");
 
     if (!mongoResult) {
-      throw new NotFoundError("No article found", { id });
+      throw new NotFoundError("No article found", { articleId });
     }
 
     const article = mongoToObject<Article>(mongoResult);
@@ -77,30 +92,42 @@ class ArticlesRepository {
 
     return article;
   }
-  async deleteArticle(id: Article["id"]) {
+
+  async delete({
+    params: { articleId },
+  }: {
+    params: { articleId: Article["id"] };
+  }) {
     const articlesCollection = await articles();
 
     const mongoResult = await articlesCollection.deleteOne({
-      _id: new ObjectId(id),
+      _id: new ObjectId(articleId),
     });
 
     debug({ mongoResult }, "mongoResult");
 
     if (!mongoResult.deletedCount) {
-      throw new NotFoundError("No article found", { id });
+      throw new NotFoundError("No article found", { articleId });
     }
 
     return {
-      id,
+      id: articleId,
     };
   }
-  async updateArticle(originalArticle: Article, id: Article["id"]) {
-    const article = Object.assign({}, originalArticle);
+
+  async update({
+    params: { articleId },
+    body,
+  }: {
+    params: { articleId: Article["id"] };
+    body: Article;
+  }) {
+    const article = Object.assign({}, body);
     const articlesCollection = await articles();
 
     const mongoResult = await articlesCollection.updateOne(
       {
-        _id: new ObjectId(id),
+        _id: new ObjectId(articleId),
       },
       {
         $set: article,
@@ -110,23 +137,11 @@ class ArticlesRepository {
     debug({ mongoResult }, "mongoResult");
 
     if (!mongoResult.matchedCount) {
-      throw new NotFoundError("No article found", { id });
+      throw new NotFoundError("No article found", { articleId });
     }
 
     return {
-      id,
+      id: articleId,
     };
   }
-}
-
-let repositoryStorage = new WeakMap<User, ArticlesRepository>();
-export function createRepository(user: User): ArticlesRepository {
-  let articlesRepository = repositoryStorage.get(user);
-  if (articlesRepository) {
-    return articlesRepository;
-  }
-  articlesRepository = new ArticlesRepository(user);
-  repositoryStorage = new WeakMap();
-  repositoryStorage.set(user, articlesRepository);
-  return articlesRepository;
 }
