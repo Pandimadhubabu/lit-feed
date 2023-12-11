@@ -4,7 +4,7 @@ import {
   feedsCollectionName,
   mongoUrl,
 } from "@/app/api/mongoConfig";
-import { MongoDocument, Identifiable } from "@/types";
+import { ID, Identifiable } from "@/types";
 import { MongoClient, ObjectId } from "mongodb";
 
 const client = new MongoClient(mongoUrl);
@@ -29,6 +29,14 @@ async function getFeedCollection(client: MongoClient) {
 
 async function getArticleCollection(client: MongoClient) {
   return getFeedDatabase(client).collection(articlesCollectionName);
+}
+/**
+ * Returns a MongoDB collection of all users
+ */
+export async function users() {
+  const client = await connectToDatabase();
+  const collection = await client.db().collection("users");
+  return collection;
 }
 
 /**
@@ -77,4 +85,8 @@ export function objectToMongo(object: Identifiable) {
   delete (mongoObject as any).id;
 
   return mongoObject;
+}
+export interface MongoDocument {
+  _id: ID;
+  [key: string]: unknown;
 }

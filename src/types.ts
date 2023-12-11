@@ -44,10 +44,15 @@ export interface Article extends Identifiable {
   date: Date;
 }
 
-// TODO: Move to mongo.ts
-export interface MongoDocument {
-  _id: ID;
-  [key: string]: unknown;
+export interface User extends Identifiable {
+  id: string;
+  email: string;
+  name: string;
+  picture: string;
+  oauthId: string;
+  isEmailVerified: boolean;
+  nickname: string;
+  updatedAt: string;
 }
 
 export interface Identifiable {

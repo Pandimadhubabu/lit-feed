@@ -1,5 +1,5 @@
-import { Article, Feed } from "@/types";
-import { OauthClaims, User } from "../types";
+import { Article, Feed, User } from "@/types";
+import { OauthClaims } from "../types";
 
 export const testFeeds: Feed[] = [
   {

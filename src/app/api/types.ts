@@ -1,5 +1,3 @@
-import { Identifiable } from "@/types";
-
 export type ErrorData = Record<string, unknown>;
 
 export type HttpResponse = {
@@ -23,15 +21,4 @@ export interface OauthClaims {
   email_verified: string;
   sub: string;
   sid: string;
-}
-
-export interface User extends Identifiable {
-  id: string;
-  email: string;
-  name: string;
-  picture: string;
-  oauthId: string;
-  isEmailVerified: boolean;
-  nickname: string;
-  updatedAt: string;
 }
