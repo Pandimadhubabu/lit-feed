@@ -2,8 +2,4 @@
 
 exports[`article lifecycle tests should be able to delete a second article 1`] = `"No article found"`;
 
-exports[`article lifecycle tests should be able to delete a second article 2`] = `"No article found"`;
-
 exports[`article lifecycle tests should be able to get all articles after delete 1`] = `"No article found"`;
-
-exports[`article lifecycle tests should be able to get all articles after delete 2`] = `"No article found"`;

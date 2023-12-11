@@ -1,3 +1,5 @@
+import { User } from "@/types";
+
 export type ErrorData = Record<string, unknown>;
 
 export type HttpResponse = {
@@ -10,6 +12,7 @@ export type NextRequestWithParams = {
   body?: Record<string, unknown>;
   query?: Record<string, unknown>;
   params?: Record<string, unknown>;
+  user?: User;
   url?: string;
 };
 

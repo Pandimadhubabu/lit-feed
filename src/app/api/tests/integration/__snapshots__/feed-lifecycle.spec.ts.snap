@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`feed lifecycle tests should be able to delete a second feed: "Feed not found" 1`] = `"No feed found"`;
-
-exports[`feed lifecycle tests should be able to delete a second feed: "Feed not found" 2`] = `"No feed found to update"`;
-
-exports[`feed lifecycle tests should be able to delete a second feed: "Feed not found" 3`] = `"No feed found to delete"`;

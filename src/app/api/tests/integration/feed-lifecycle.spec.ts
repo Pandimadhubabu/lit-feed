@@ -109,9 +109,9 @@ describe("feed lifecycle tests", () => {
   });
 
   test("should not be able to get a deleted feed", async () => {
-    expect(
-      getFeed({ params: { feedId: testFeeds[0].id } }),
-    ).rejects.toThrowErrorMatchingSnapshot(`"Feed not found"`);
+    expect(getFeed({ params: { feedId: testFeeds[0].id } })).rejects.toThrow(
+      `No feed found`,
+    );
   });
 
   test("should not be able to update a deleted feed", async () => {
@@ -120,13 +120,13 @@ describe("feed lifecycle tests", () => {
         params: { feedId: testFeeds[0].id },
         body: { ...testFeeds[0], name: "new name" },
       }),
-    ).rejects.toThrowErrorMatchingSnapshot(`"Feed not found"`);
+    ).rejects.toThrow(`No feed found to update`);
   });
 
   test("should not be able to delete a deleted feed", async () => {
-    expect(
-      deleteFeed({ params: { feedId: testFeeds[0].id } }),
-    ).rejects.toThrowErrorMatchingSnapshot(`"Feed not found"`);
+    expect(deleteFeed({ params: { feedId: testFeeds[0].id } })).rejects.toThrow(
+      `No feed found to delete`,
+    );
   });
 
   test("should be able to delete a second feed", async () => {

@@ -32,10 +32,9 @@ export function withParams(
   };
 }
 
-export async function toNextResponse<T extends (request: any) => HttpResponse>(
-  request: NextRequestWithParams,
-  fn: T,
-) {
+export async function toNextResponse<
+  T extends (request: NextRequestWithParams) => HttpResponse,
+>(request: NextRequestWithParams, fn: T) {
   const claims = await getClaims(request);
   const user = await getUserByClaims(claims);
 
@@ -89,7 +88,9 @@ export async function toNextResponse<T extends (request: any) => HttpResponse>(
 }
 
 // TODO: Add request validation
-export function toNextEndpoint<T extends (request: any) => any>(fn: T) {
+export function toNextEndpoint<
+  T extends (request: NextRequestWithParams) => HttpResponse,
+>(fn: T) {
   return withParams(async (request: NextRequestWithParams) =>
     toNextResponse(request, fn),
   );
