@@ -7,7 +7,7 @@ import { toNextEndpoint } from "../next";
  * @param body Unused
  * @returns A list of all feed sources
  */
-export const GET = toNextEndpoint(createHandler(Feeds, "get"));
+export const GET = toNextEndpoint(createHandler(Feeds, "getAll"));
 
 /**
  * Adds a new feed
