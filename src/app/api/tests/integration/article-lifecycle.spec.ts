@@ -3,11 +3,13 @@ import { getArticles } from "../../feeds/[feedId]/articles/getArticles";
 import { deleteFeed } from "../../feeds/[feedId]/deleteFeed";
 import { getFeeds } from "../../feeds/getFeeds";
 import { deleteArticle } from "../../feeds/[feedId]/articles/[articleId]/deleteArticle";
-import { testArticles, testFeeds } from "@/app/api/models/testData";
+import { testArticles, testFeeds, testUser } from "@/app/api/models/testData";
 import { addArticle } from "../../feeds/[feedId]/articles/addArticle";
 import { omit } from "../../utils";
 import { addFeed } from "../../feeds/addFeed";
 import { getArticle } from "../../feeds/[feedId]/articles/[articleId]/getArticle";
+
+const user = testUser;
 
 describe("article lifecycle tests", () => {
   let feedId: Feed["id"];
@@ -23,6 +25,7 @@ describe("article lifecycle tests", () => {
             params: {
               feedId: feed.id,
             },
+            user,
           });
 
           return articles;
@@ -37,6 +40,7 @@ describe("article lifecycle tests", () => {
           params: {
             articleId: article.id,
           },
+          user,
         });
 
         expect(message).toBe("Article deleted");
@@ -74,6 +78,7 @@ describe("article lifecycle tests", () => {
       params: {
         feedId,
       },
+      user,
     });
 
     expect(message).toBe("Article added");
@@ -93,6 +98,7 @@ describe("article lifecycle tests", () => {
       params: {
         feedId,
       },
+      user,
     });
 
     expect(message).toBe("Article added");
@@ -108,6 +114,7 @@ describe("article lifecycle tests", () => {
       params: {
         feedId,
       },
+      user,
     });
 
     expect(message).toBe("Articles retrieved");
@@ -119,6 +126,7 @@ describe("article lifecycle tests", () => {
       params: {
         articleId: testArticles[0].id,
       },
+      user,
     });
 
     expect(message).toBe("Article deleted");
@@ -130,6 +138,7 @@ describe("article lifecycle tests", () => {
       params: {
         feedId,
       },
+      user,
     });
 
     expect(message).toBe("Articles retrieved");
@@ -142,6 +151,7 @@ describe("article lifecycle tests", () => {
         params: {
           articleId: testArticles[0].id,
         },
+        user,
       }),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
@@ -152,6 +162,7 @@ describe("article lifecycle tests", () => {
         params: {
           articleId: testArticles[0].id,
         },
+        user,
       }),
     ).rejects.toThrowErrorMatchingSnapshot();
   });
@@ -161,6 +172,7 @@ describe("article lifecycle tests", () => {
       params: {
         articleId: testArticles[1].id,
       },
+      user,
     });
 
     expect(message).toBe("Article deleted");
@@ -172,6 +184,7 @@ describe("article lifecycle tests", () => {
       params: {
         feedId,
       },
+      user,
     });
 
     expect(message).toBe("Articles retrieved");

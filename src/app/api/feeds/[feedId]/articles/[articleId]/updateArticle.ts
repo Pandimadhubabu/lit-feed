@@ -1,14 +1,17 @@
-import * as articlesModel from "@/app/api/models/articles";
-import { Article } from "@/types";
+import { createRepository } from "@/app/api/models/articles";
+import { Article, User } from "@/types";
 
 export async function updateArticle({
   body,
   params: { articleId },
+  user,
 }: {
   body: Article;
   params: { articleId: Article["id"] };
+  user: User;
 }) {
-  const data = await articlesModel.updateArticle(body, articleId);
+  const articles = createRepository(user);
+  const data = await articles.updateArticle(body, articleId);
 
   return {
     status: 200,

@@ -6,6 +6,9 @@ import { deleteFeed } from "../../feeds/[feedId]/deleteFeed";
 import { addFeed } from "../../feeds/addFeed";
 import { getFeeds } from "../../feeds/getFeeds";
 import * as logger from "../../logger";
+import { getLocalhostUser } from "../../next";
+
+const user = getLocalhostUser();
 
 describe("article lifecycle tests", () => {
   test("should create test data for testing the UI", async () => {
@@ -22,6 +25,7 @@ describe("article lifecycle tests", () => {
             params: {
               feedId: feed.id,
             },
+            user,
           });
 
           return articles;
@@ -36,6 +40,7 @@ describe("article lifecycle tests", () => {
           params: {
             articleId: article.id,
           },
+          user,
         });
 
         expect(message).toBe("Article deleted");
@@ -125,6 +130,7 @@ describe("article lifecycle tests", () => {
           params: {
             feedId,
           },
+          user,
         });
 
         logger.info({ data }, message);

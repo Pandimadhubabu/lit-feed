@@ -9,10 +9,10 @@ const localhostClaims: OauthClaims = {
   email: "fake@example.com",
   name: "Fake User",
   email_verified: "true",
-  nickname: "fakeuser",
+  nickname: "localhostUser",
   picture: "https://example.com",
-  sub: "fakeuser",
-  sid: "fakeuser",
+  sub: "localhostUser",
+  sid: "localhostUser",
   updated_at: Date.now().toString(),
 };
 export function withParams(
@@ -32,15 +32,16 @@ export function withParams(
   };
 }
 
-export async function toNextResponse<
-  T extends (request: any, user: User) => HttpResponse,
->(request: NextRequestWithParams, fn: T) {
+export async function toNextResponse<T extends (request: any) => HttpResponse>(
+  request: NextRequestWithParams,
+  fn: T,
+) {
   const claims = await getClaims(request);
   const user = await getUserByClaims(claims);
 
   let response: HttpResponse;
   try {
-    response = await fn(request, user);
+    response = await fn({ ...request, user });
   } catch (error: unknown) {
     if (error instanceof GenericError) {
       return NextResponse.json(
@@ -56,10 +57,18 @@ export async function toNextResponse<
       );
     }
 
-    logger.error({ error }, "Error while handling request");
+    if (error instanceof Error) {
+      logger.error(
+        { message: error.message, name: error.name, stack: error.stack },
+        "Error while handling request",
+      );
+    }
+
     return NextResponse.json(
       {
-        error,
+        error: {
+          message: "Something went wrong",
+        },
       },
       {
         status: 500,
@@ -126,19 +135,25 @@ export async function getClaims(
   }
 }
 
+/**
+ * Return a fake user for local development
+ */
+export function getLocalhostUser(): User {
+  return {
+    id: "localhostUser",
+    email: localhostClaims.email,
+    isEmailVerified: localhostClaims.email_verified === "true",
+    updatedAt: new Date(localhostClaims.updated_at),
+    name: localhostClaims.name,
+    nickname: localhostClaims.nickname,
+    picture: localhostClaims.picture,
+    oauthId: localhostClaims.sub,
+  };
+}
+
 export async function getUserByClaims(claims: OauthClaims): Promise<User> {
   if (claims.sub === localhostClaims.sub) {
-    // Return a fake user for local development
-    return {
-      id: "fakeuser",
-      email: localhostClaims.email,
-      isEmailVerified: localhostClaims.email_verified === "true",
-      updatedAt: new Date(localhostClaims.updated_at),
-      name: localhostClaims.name,
-      nickname: localhostClaims.nickname,
-      picture: localhostClaims.picture,
-      oauthId: localhostClaims.sub,
-    };
+    return getLocalhostUser();
   }
   return await getOrCreateUser(claims);
 }
