@@ -31,3 +31,13 @@ export class UnauthorizedError extends GenericError {
     this.status = 401;
   }
 }
+
+export class ServerError extends GenericError {
+  status: number;
+  name: string;
+  constructor(message: string, data?: ErrorData) {
+    super(message, data);
+    this.name = "ServerError";
+    this.status = 500;
+  }
+}

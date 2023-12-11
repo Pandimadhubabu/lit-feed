@@ -1,3 +1,5 @@
+const MockedNextRequest = jest.fn();
+
 import { NextRequest, NextResponse } from "next/server";
 import { testClaims } from "./models/testData";
 import { NextRequestWithParams } from "./types";
@@ -7,30 +9,23 @@ jest.mock("./mongoConfig", () => ({
   mongoUrl: "mongodb://localhost:27017",
 }));
 
-jest.mock("@auth0/nextjs-auth0", () => ({
-  getSession: jest.fn().mockResolvedValue({
-    // Yeah, it is confusing because auth0 calls it user and claims interchangeably
-    user: testClaims,
-  }),
-}));
-
 jest.mock("next/server", () => {
-  const NextResponse = jest.fn();
-  (NextResponse as any).json = jest
-    .fn()
-    .mockReturnValue(new NextResponse("OK"));
+  const NextServer = jest.requireActual("next/server");
   return {
-    NextRequest: jest.fn().mockImplementation(() => ({
-      nextUrl: {
-        searchParams: new URLSearchParams(),
-      },
-      url: "http://localhost",
-    })),
-    NextResponse,
+    ...NextServer,
+    NextRequest: MockedNextRequest,
   };
 });
 
 describe("next.ts tests", () => {
+  beforeAll(() => {
+    MockedNextRequest.mockImplementation(() => ({
+      nextUrl: {
+        searchParams: new URLSearchParams(),
+      },
+      url: "http://localhost",
+    }));
+  });
   test("withParams should return a function", () => {
     const fn = jest.fn().mockResolvedValue(new NextResponse("OK"));
     const result = withParams(fn);
@@ -58,10 +53,13 @@ describe("next.ts tests", () => {
         body: undefined,
         query: undefined,
         params: {},
+        url: "http://localhost",
       },
       fn,
     );
-    expect(nextHandler).resolves.toEqual(new NextResponse("OK"));
+    const response = await nextHandler;
+    const { data } = await response.json();
+    expect(data).toEqual("OK");
   });
 
   test("toNextEndpoint should return a function that takes a NextRequest, and a params object and returns a NextResponse", async () => {
@@ -70,6 +68,24 @@ describe("next.ts tests", () => {
     const response = await nextHandler(new NextRequest("http://localhost"), {
       params: {},
     });
-    expect(response).toEqual(new NextResponse("OK"));
+
+    const { data } = await response.json();
+    expect(data).toEqual("OK");
+  });
+
+  test("accessing any URL other than localhost should throw an error", async () => {
+    MockedNextRequest.mockImplementation(() => ({
+      nextUrl: {
+        searchParams: new URLSearchParams(),
+      },
+      url: "http://example.com",
+    }));
+    const fn = jest.fn().mockResolvedValue({ data: "OK", status: 200 });
+    const nextHandler = toNextEndpoint(fn);
+    expect(
+      nextHandler(new NextRequest("http://example.com"), {
+        params: {},
+      }),
+    ).rejects.toThrow("Something went wrong");
   });
 });

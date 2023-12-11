@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as logger from "./logger";
-import { GenericError, UnauthorizedError } from "./errors";
+import { GenericError, ServerError, UnauthorizedError } from "./errors";
 import { HttpResponse, NextRequestWithParams, OauthClaims } from "./types";
 import { getSession } from "@auth0/nextjs-auth0";
 import { User } from "@/types";
@@ -113,13 +113,17 @@ export async function getClaims(
     return localhostClaims;
   }
 
-  const session = await getSession();
+  try {
+    const session = await getSession();
 
-  if (!session) {
-    throw new UnauthorizedError("User is not logged in");
+    if (!session) {
+      throw new UnauthorizedError("User is not logged in");
+    }
+
+    return session.user as OauthClaims;
+  } catch (error) {
+    throw new ServerError("Something went wrong");
   }
-
-  return session.user as OauthClaims;
 }
 
 export async function getUserByClaims(claims: OauthClaims): Promise<User> {
