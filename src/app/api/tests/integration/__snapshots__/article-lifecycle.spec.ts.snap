@@ -1,6 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[` 1`] = `"Feed deleted"`;
+exports[` 1`] = `"Performed delete on Articles successfully"`;
+
+exports[` 2`] = `"Performed delete on Articles successfully"`;
+
+exports[` 3`] = `"Performed delete on Articles successfully"`;
+
+exports[` 4`] = `"Performed delete on Articles successfully"`;
+
+exports[` 5`] = `"Performed delete on Articles successfully"`;
+
+exports[` 6`] = `"Performed delete on Articles successfully"`;
+
+exports[` 7`] = `"Performed delete on Feeds successfully"`;
+
+exports[` 8`] = `"Performed delete on Feeds successfully"`;
+
+exports[` 9`] = `"Performed delete on Feeds successfully"`;
 
 exports[`article lifecycle tests should be able to add a new article 1`] = `"Performed create on Articles successfully"`;
 

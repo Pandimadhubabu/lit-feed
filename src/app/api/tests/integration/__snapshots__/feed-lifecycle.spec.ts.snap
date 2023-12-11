@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` 1`] = `"Performed delete on Feeds successfully"`;
+
+exports[`feed lifecycle tests should be able to add a new feed 1`] = `"Performed create on Feeds successfully"`;
+
+exports[`feed lifecycle tests should be able to add a second feed 1`] = `"Performed create on Feeds successfully"`;
+
+exports[`feed lifecycle tests should be able to delete a feed 1`] = `"Performed delete on Feeds successfully"`;
+
+exports[`feed lifecycle tests should be able to delete a second feed 1`] = `"Performed delete on Feeds successfully"`;
+
+exports[`feed lifecycle tests should be able to get a feed 1`] = `"Performed get on Feeds successfully"`;
+
+exports[`feed lifecycle tests should be able to get all feeds 1`] = `"Performed getAll on Feeds successfully"`;
+
+exports[`feed lifecycle tests should be able to get all feeds after delete 1`] = `"Performed getAll on Feeds successfully"`;
+
+exports[`feed lifecycle tests should be able to update a feed 1`] = `"Performed update on Feeds successfully"`;
+
+exports[`feed lifecycle tests should return an empty array when getting all feeds after delete 1`] = `"Performed getAll on Feeds successfully"`;

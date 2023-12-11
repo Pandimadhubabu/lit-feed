@@ -1,23 +1,26 @@
 import { Feed, Article } from "@/types";
-import { deleteFeed } from "../../feeds/[feedId]/deleteFeed";
-import { getFeeds } from "../../feeds/getFeeds";
 import { testArticles, testFeeds, testUser } from "@/app/api/models/testData";
 import { omit } from "../../utils";
-import { addFeed } from "../../feeds/addFeed";
 import { createHandler } from "../../createHandler";
 import { Articles } from "../../models/articles";
+import { Feeds } from "../../models/feeds";
 
 const user = testUser;
 const getArticles = createHandler(Articles, "getAll");
 const getArticle = createHandler(Articles, "get");
 const deleteArticle = createHandler(Articles, "delete");
 const createArticle = createHandler(Articles, "create");
+const getFeeds = createHandler(Feeds, "getAll");
+const deleteFeed = createHandler(Feeds, "delete");
+const addFeed = createHandler(Feeds, "create");
 
 describe("article lifecycle tests", () => {
   let feedId: Feed["id"];
   beforeAll(async () => {
     // Get all feeds
-    const { data: allFeeds } = await getFeeds();
+    const { data: allFeeds } = await getFeeds({
+      user,
+    });
 
     // Get all articles from all feeds
     const allArticles = (
@@ -57,6 +60,7 @@ describe("article lifecycle tests", () => {
           params: {
             feedId: feed.id,
           },
+          user,
         });
 
         expect(message).toMatchSnapshot();
@@ -66,7 +70,10 @@ describe("article lifecycle tests", () => {
 
     // Create feed
     const { data, message } = await addFeed({
-      body: testFeeds[0],
+      body: {
+        ...testFeeds[0],
+      },
+      user,
     });
     feedId = data.id;
   });

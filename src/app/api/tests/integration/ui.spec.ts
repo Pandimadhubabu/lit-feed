@@ -1,23 +1,26 @@
 import { Article, Feed } from "@/types";
 import { createHandler } from "../../createHandler";
-import { deleteFeed } from "../../feeds/[feedId]/deleteFeed";
-import { addFeed } from "../../feeds/addFeed";
-import { getFeeds } from "../../feeds/getFeeds";
 import * as logger from "../../logger";
 import { Articles } from "../../models/articles";
 import { getLocalhostUser } from "../../next";
+import { Feeds } from "../../models/feeds";
 
 const user = getLocalhostUser();
 const getArticles = createHandler(Articles, "getAll");
 const deleteArticle = createHandler(Articles, "delete");
 const createArticle = createHandler(Articles, "create");
+const getFeeds = createHandler(Feeds, "getAll");
+const deleteFeed = createHandler(Feeds, "delete");
+const addFeed = createHandler(Feeds, "create");
 
 describe("article lifecycle tests", () => {
   test("should create test data for testing the UI", async () => {
     const feedIds: string[] = [];
     const feedNames: string[] = [];
     // Get all feeds
-    const { data: allFeeds } = await getFeeds();
+    const { data: allFeeds } = await getFeeds({
+      user,
+    });
 
     // Get all articles from all feeds
     const allArticles = (
@@ -57,6 +60,7 @@ describe("article lifecycle tests", () => {
           params: {
             feedId: feed.id,
           },
+          user,
         });
 
         expect(message).toBe("Feed deleted");
@@ -88,6 +92,7 @@ describe("article lifecycle tests", () => {
     for (const feed of feeds) {
       const { data, message } = await addFeed({
         body: feed,
+        user,
       });
       logger.info({ data }, message);
       feedIds.push(data.id);

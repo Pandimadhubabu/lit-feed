@@ -1,17 +1,17 @@
+import { createHandler } from "../createHandler";
+import { Feeds } from "../models/feeds";
 import { toNextEndpoint } from "../next";
-import { addFeed } from "./addFeed";
-import { getFeeds } from "./getFeeds";
 
 /**
  * Returns a list of all feed sources
  * @param body Unused
  * @returns A list of all feed sources
  */
-export const GET = toNextEndpoint(getFeeds);
+export const GET = toNextEndpoint(createHandler(Feeds, "get"));
 
 /**
  * Adds a new feed
  * @param body The feed to add
  * @returns The added feed
  */
-export const POST = toNextEndpoint(addFeed);
+export const POST = toNextEndpoint(createHandler(Feeds, "create"));
