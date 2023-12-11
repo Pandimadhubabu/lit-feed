@@ -10,6 +10,7 @@ export type NextRequestWithParams = {
   body?: Record<string, unknown>;
   query?: Record<string, unknown>;
   params?: Record<string, unknown>;
+  url?: string;
 };
 
 export interface OauthClaims {

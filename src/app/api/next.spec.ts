@@ -1,7 +1,11 @@
-import { testClaims, testUser } from "./models/testData";
 import { NextRequest, NextResponse } from "next/server";
-import { toNextEndpoint, toNextResponse, withParams } from "./next";
+import { testClaims } from "./models/testData";
 import { NextRequestWithParams } from "./types";
+import { toNextEndpoint, toNextResponse, withParams } from "./next";
+
+jest.mock("./mongoConfig", () => ({
+  mongoUrl: "mongodb://localhost:27017",
+}));
 
 jest.mock("@auth0/nextjs-auth0", () => ({
   getSession: jest.fn().mockResolvedValue({
@@ -20,6 +24,7 @@ jest.mock("next/server", () => {
       nextUrl: {
         searchParams: new URLSearchParams(),
       },
+      url: "http://localhost",
     })),
     NextResponse,
   };
@@ -42,6 +47,7 @@ describe("next.ts tests", () => {
       body: undefined,
       query: undefined,
       params,
+      url: "http://localhost",
     });
   });
 

@@ -51,7 +51,7 @@ export const testUser: User = {
   oauthId: "OAUTH_ID",
   isEmailVerified: true,
   nickname: "test",
-  updatedAt: "2020-01-01T00:00:00.000Z",
+  updatedAt: new Date("2020-01-01T00:00:00.000Z"),
 };
 
 export const testClaims: OauthClaims = {
@@ -62,5 +62,5 @@ export const testClaims: OauthClaims = {
   picture: testUser.picture,
   sid: "SESSION_ID",
   sub: testUser.oauthId,
-  updated_at: testUser.updatedAt,
+  updated_at: testUser.updatedAt.toISOString(),
 };

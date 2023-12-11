@@ -62,6 +62,6 @@ export function convertClaimsToUser(claims: OauthClaims): Omit<User, "id"> {
     nickname: claims.nickname,
     picture: claims.picture,
     oauthId: claims.sub,
-    updatedAt: claims.updated_at,
+    updatedAt: new Date(claims.updated_at),
   };
 }

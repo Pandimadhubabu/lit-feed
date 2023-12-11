@@ -17,7 +17,6 @@ export type PageLink = string;
 export type Href = string;
 export type Title = string;
 export type Summary = string;
-export type Date = string;
 export type DateTime = string;
 export type Email = string;
 export type Duration = string;
@@ -41,7 +40,7 @@ export interface Article extends Identifiable {
   isRead: boolean;
   isSaved: boolean;
   content?: string;
-  date: Date;
+  date: string;
 }
 
 export interface User extends Identifiable {
@@ -52,7 +51,7 @@ export interface User extends Identifiable {
   oauthId: string;
   isEmailVerified: boolean;
   nickname: string;
-  updatedAt: string;
+  updatedAt: Date;
 }
 
 export interface Identifiable {

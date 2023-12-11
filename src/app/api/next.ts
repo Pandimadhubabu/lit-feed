@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as logger from "./logger";
-import { GenericError } from "./errors";
+import { GenericError, UnauthorizedError } from "./errors";
 import { HttpResponse, NextRequestWithParams, OauthClaims } from "./types";
 import { getSession } from "@auth0/nextjs-auth0";
-
+import { User } from "@/types";
+import { getOrCreateUser } from "./models/users";
+const localhostClaims: OauthClaims = {
+  email: "fake@example.com",
+  name: "Fake User",
+  email_verified: "true",
+  nickname: "fakeuser",
+  picture: "https://example.com",
+  sub: "fakeuser",
+  sid: "fakeuser",
+  updated_at: Date.now().toString(),
+};
 export function withParams(
   fn: (request: NextRequestWithParams) => Promise<NextResponse>,
 ) {
@@ -16,29 +27,20 @@ export function withParams(
       body: await parseBody(request),
       query: Object.keys(queryParams).length > 0 ? queryParams : undefined,
       params,
+      url: request.url,
     });
   };
 }
 
 export async function toNextResponse<
-  T extends (request: any, oauthClaims: OauthClaims) => HttpResponse,
+  T extends (request: any, user: User) => HttpResponse,
 >(request: NextRequestWithParams, fn: T) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json(
-      {
-        error: {
-          message: "Unauthorized",
-        },
-      },
-      {
-        status: 401,
-      },
-    );
-  }
+  const claims = await getClaims(request);
+  const user = await getUserByClaims(claims);
+
   let response: HttpResponse;
   try {
-    response = await fn(request, session.user as OauthClaims);
+    response = await fn(request, user);
   } catch (error: unknown) {
     if (error instanceof GenericError) {
       return NextResponse.json(
@@ -100,4 +102,39 @@ export async function parseBody(request: NextRequest) {
   } catch {
     return undefined;
   }
+}
+export async function getClaims(
+  request: NextRequestWithParams,
+): Promise<OauthClaims> {
+  const { url } = request;
+
+  if (url?.match(/:\/\/localhost/)) {
+    // Return a fake user for local development
+    return localhostClaims;
+  }
+
+  const session = await getSession();
+
+  if (!session) {
+    throw new UnauthorizedError("User is not logged in");
+  }
+
+  return session.user as OauthClaims;
+}
+
+export async function getUserByClaims(claims: OauthClaims): Promise<User> {
+  if (claims.sub === localhostClaims.sub) {
+    // Return a fake user for local development
+    return {
+      id: "fakeuser",
+      email: localhostClaims.email,
+      isEmailVerified: localhostClaims.email_verified === "true",
+      updatedAt: new Date(localhostClaims.updated_at),
+      name: localhostClaims.name,
+      nickname: localhostClaims.nickname,
+      picture: localhostClaims.picture,
+      oauthId: localhostClaims.sub,
+    };
+  }
+  return await getOrCreateUser(claims);
 }
