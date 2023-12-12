@@ -33,20 +33,20 @@ describe("Feeds model tests", () => {
 
   test("getFeed should return an object", async () => {
     const feedId = testFeeds[0].id;
-    const feed = await feedsRepository.get({ params: { id: feedId } });
+    const feed = await feedsRepository.get({ params: { feedId: feedId } });
     expect(feed).toEqual(testFeeds[0]);
   });
 
   test("deleteFeed should return an id", async () => {
     const feedId = testFeeds[0].id;
-    const { id } = await feedsRepository.delete({ params: { id: feedId } });
+    const { id } = await feedsRepository.delete({ params: { feedId: feedId } });
     expect(id).toBe(feedId);
   });
 
   test("updateFeed should return an object with matchedCount and modifiedCount", async () => {
     const feedId = testFeeds[0].id;
     const { id } = await feedsRepository.update({
-      params: { id: feedId },
+      params: { feedId: feedId },
       body: {
         ...testFeeds[0],
         name: "Updated name",
