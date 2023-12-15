@@ -1,6 +1,6 @@
 import { UnauthorizedError } from "./errors";
 import { Repository, createRepository } from "./models/Repository";
-import { HttpResponse, NextRequestWithParams } from "./types";
+import { NextRequestWithParams } from "./types";
 
 type MethodToDataType<U> = {
   get: U;
@@ -15,7 +15,7 @@ type MethodReturnType<
   M extends "get" | "getAll" | "create" | "delete" | "update",
 > = R extends typeof Repository<infer U> ? MethodToDataType<U>[M] : never;
 
-export function createHandler<
+export function createHandlerFromRepository<
   R extends typeof Repository<unknown>,
   M extends "get" | "getAll" | "create" | "delete" | "update",
 >(

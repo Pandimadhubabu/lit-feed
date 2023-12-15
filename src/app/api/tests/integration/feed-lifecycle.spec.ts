@@ -2,7 +2,7 @@ import { testFeeds, testUser } from "@/app/api/models/testData";
 import { Feed } from "@/types";
 import { omit } from "../../utils";
 import { Feeds } from "../../models/feeds";
-import { createHandler } from "../../createHandler";
+import { createHandlerFromRepository } from "../../createHandler";
 
 const user = testUser;
 const secondUser = {
@@ -10,11 +10,11 @@ const secondUser = {
   id: "245b23984f233d32b233f2f4",
 };
 
-const getFeeds = createHandler(Feeds, "getAll");
-const deleteFeed = createHandler(Feeds, "delete");
-const addFeed = createHandler(Feeds, "create");
-const updateFeed = createHandler(Feeds, "update");
-const getFeed = createHandler(Feeds, "get");
+const getFeeds = createHandlerFromRepository(Feeds, "getAll");
+const deleteFeed = createHandlerFromRepository(Feeds, "delete");
+const addFeed = createHandlerFromRepository(Feeds, "create");
+const updateFeed = createHandlerFromRepository(Feeds, "update");
+const getFeed = createHandlerFromRepository(Feeds, "get");
 
 describe("feed lifecycle tests", () => {
   beforeAll(async () => {

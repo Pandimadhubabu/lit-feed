@@ -1,4 +1,4 @@
-import { createHandler } from "@/app/api/createHandler";
+import { createHandlerFromRepository } from "@/app/api/createHandler";
 import { Articles } from "@/app/api/models/articles";
 import { toNextEndpoint } from "@/app/api/next";
 
@@ -7,4 +7,6 @@ import { toNextEndpoint } from "@/app/api/next";
  * @param {string} feedId
  * @returns An array of articles
  */
-export const GET = toNextEndpoint(createHandler(Articles, "getAll"));
+export const GET = toNextEndpoint(
+  createHandlerFromRepository(Articles, "getAll"),
+);
