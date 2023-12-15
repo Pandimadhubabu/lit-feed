@@ -16,8 +16,34 @@ export class ArticlesController extends Repository<Article> {
 
     const articlesRepository = await createRepository(Articles, this.user);
 
+    const oldArticles = await articlesRepository.getAll({ params: { feedId } });
+
     const partialArticles = await getPartialArticles(feed.href);
-    const articles = await enrichPartialArticles({ partialArticles, feed });
+
+    const newArticles = partialArticles.filter(
+      (partialArticle) =>
+        !oldArticles.find(
+          (oldArticle) => oldArticle.href === partialArticle.href,
+        ),
+    );
+
+    if (newArticles.length === 0) {
+      logger.debug({ feed }, "No new articles");
+      return;
+    }
+
+    await feedsRepository.update({
+      params: { feedId },
+      body: {
+        ...feed,
+        updatedAt: new Date(),
+      },
+    });
+
+    const articles = await enrichPartialArticles({
+      partialArticles: newArticles,
+      feed,
+    });
 
     const result: Article[] = [];
     for (const article of articles) {

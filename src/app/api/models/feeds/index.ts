@@ -11,6 +11,7 @@ export class Feeds extends Repository<Feed> {
       {
         ...body,
         userId: this.user.id,
+        updatedAt: new Date(),
       },
     );
     const feedsCollection = await feeds();
@@ -107,7 +108,10 @@ export class Feeds extends Repository<Feed> {
         _id: new ObjectId(feedId),
       },
       {
-        $set: feed,
+        $set: {
+          ...feed,
+          updatedAt: new Date(),
+        },
       },
     );
 
