@@ -4,26 +4,28 @@ export class Repository<T> {
   constructor(protected user: User) {}
 
   async get(request: HandlerRequest): Promise<T> {
-    return {} as T;
+    throw new Error("Not implemented");
   }
 
   async getAll(request: HandlerRequest): Promise<T[]> {
-    return [] as T[];
+    throw new Error("Not implemented");
   }
 
   async create(request: HandlerRequest): Promise<T> {
-    return {} as T;
+    throw new Error("Not implemented");
   }
 
   async delete(request: HandlerRequest): Promise<{ id: string }> {
-    return { id: "" };
+    throw new Error("Not implemented");
   }
 
   async update(request: HandlerRequest): Promise<{ id: string }> {
-    return { id: "" };
+    throw new Error("Not implemented");
   }
 
-  async execute(request: HandlerRequest): Promise<void> {}
+  async execute(request: HandlerRequest): Promise<void> {
+    throw new Error("Not implemented");
+  }
 }
 
 const repositories: {

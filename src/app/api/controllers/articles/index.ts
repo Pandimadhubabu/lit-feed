@@ -1,20 +1,20 @@
 import { Article, Feed, User } from "@/types";
 import * as logger from "../../logger";
 import { Repository, createRepository } from "../../models/Repository";
-import { Articles as ArticlesModel } from "../../models/articles";
-import { Feeds as FeedsModel } from "../../models/feeds";
+import { Articles } from "../../models/articles";
+import { Feeds } from "../../models/feeds";
 import { XMLParser } from "fast-xml-parser";
 
-export class Articles extends Repository<Article> {
+export class ArticlesController extends Repository<Article> {
   async execute({
     params: { feedId },
   }: {
     params: { feedId: Feed["id"] };
   }): Promise<void> {
-    const feedsRepository = await createRepository(FeedsModel, this.user);
+    const feedsRepository = await createRepository(Feeds, this.user);
     const feed = await feedsRepository.get({ params: { feedId } });
 
-    const articlesRepository = await createRepository(ArticlesModel, this.user);
+    const articlesRepository = await createRepository(Articles, this.user);
 
     const partialArticles = await getPartialArticles(feed.href);
     const articles = await enrichPartialArticles({ partialArticles, feed });
@@ -31,7 +31,7 @@ export class Articles extends Repository<Article> {
       result.push(savedArticle);
     }
 
-    logger.debug({ result }, "Refreshed articles");
+    logger.debug({ result, feed }, "Refreshed articles");
   }
 }
 

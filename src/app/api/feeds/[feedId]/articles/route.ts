@@ -1,4 +1,4 @@
-import { Articles as ArticlesController } from "@/app/api/controllers/articles";
+import { ArticlesController as ArticlesController } from "@/app/api/controllers/articles";
 import {
   createHandler,
   createHandlerForController,
