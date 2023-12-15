@@ -13,15 +13,22 @@ export function Article({ article }: { article: Article }) {
       {/* Deployment list */}
       <div className="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
         <div className="min-w-0 flex-auto">
+          <span
+            id="summary"
+            dangerouslySetInnerHTML={{ __html: article.summary }}
+            className="truncate"
+          ></span>
           <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 dark:text-gray-400 text-gray-800">
-            <p className="truncate">description</p>
+            <p className="whitespace-nowrap">Published at</p>
             <svg
               viewBox="0 0 2 2"
               className="h-0.5 w-0.5 flex-none fill-gray-300"
             >
               <circle cx={1} cy={1} r={1} />
             </svg>
-            <p className="whitespace-nowrap">status</p>
+            <p className="whitespace-nowrap">
+              <time>{article.date}</time>
+            </p>
           </div>
         </div>
         <ChevronRightIcon

@@ -177,7 +177,7 @@ export default function Feed() {
                   {article.feedName}
                 </span>
                 <time
-                  dateTime={article.duration}
+                  dateTime={article.date}
                   className={
                     (selectedArticle === index
                       ? "text-gray-600"
