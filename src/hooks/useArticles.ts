@@ -19,6 +19,7 @@ export function useArticles({ feedId }: { feedId?: string }) {
 
   return {
     articles,
+    setArticles,
     isLoading,
     error,
   };

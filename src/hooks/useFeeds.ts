@@ -18,6 +18,7 @@ export function useFeeds() {
   );
   return {
     feeds,
+    setFeeds,
     isLoading,
     error,
   };

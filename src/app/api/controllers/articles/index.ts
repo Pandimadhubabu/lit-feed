@@ -32,14 +32,6 @@ export class ArticlesController extends Repository<Article> {
       return;
     }
 
-    await feedsRepository.update({
-      params: { feedId },
-      body: {
-        ...feed,
-        updatedAt: new Date(),
-      },
-    });
-
     const articles = await enrichPartialArticles({
       partialArticles: newArticles,
       feed,
@@ -57,7 +49,17 @@ export class ArticlesController extends Repository<Article> {
       result.push(savedArticle);
     }
 
-    logger.debug({ result, feed }, "Refreshed articles");
+    logger.debug({ result }, "Refreshed articles");
+
+    await feedsRepository.update({
+      params: { feedId },
+      body: {
+        ...feed,
+        updatedAt: new Date(),
+      },
+    });
+
+    logger.debug({ feed }, "Updated feed");
   }
 }
 

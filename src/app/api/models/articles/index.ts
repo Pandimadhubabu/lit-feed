@@ -17,6 +17,8 @@ export class Articles extends Repository<Article> {
       .find({
         feedId,
       })
+      .sort({ date: 1 })
+      .limit(10)
       .toArray();
 
     logger.debug({ mongoResult }, "mongoResult");

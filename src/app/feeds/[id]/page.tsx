@@ -3,20 +3,42 @@ import { Article } from "@/components/Article";
 import { Loading } from "@/components/Loading";
 import Shell from "@/components/Shell";
 import { useArticles } from "@/hooks/useArticles";
+import { useFeeds } from "@/hooks/useFeeds";
+import type { Article as ArticleType } from "@/types";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useParams } from "next/navigation";
-import { Fragment, use, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+
+async function refreshFeed(feedId: string) {
+  const response = await fetch(`/api/feeds/${feedId}/refresh`, {
+    method: "POST",
+  });
+  const { message } = await response.json();
+
+  return message;
+}
+
+async function refreshArticles(feedId: string) {
+  const response = await fetch(`/api/feeds/${feedId}/articles`);
+  const { data } = await response.json();
+
+  return data;
+}
 
 export default function Feed() {
   const [articleOpen, setArticleOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(0);
   const [headerTitle, setHeaderTitle] = useState("");
+  const [isArticlesRefreshed, setIsArticlesRefreshed] = useState(false);
   const { id } = useParams();
   const feedId = id as Exclude<typeof id, string[]>;
 
+  const { feeds, isLoading: isLoadingFeeds, error: feedsError } = useFeeds();
+
   const {
     articles,
+    setArticles,
     isLoading: isLoadingArticles,
     error: articlesError,
   } = useArticles({
@@ -24,12 +46,34 @@ export default function Feed() {
   });
 
   useEffect(() => {
-    if (isLoadingArticles || !articles) return;
-    const firstArticle = articles[0];
-    if (!firstArticle) return;
-    const { feedName } = firstArticle;
-    setHeaderTitle(feedName);
-  }, [isLoadingArticles, articles]);
+    if (isLoadingArticles || !articles || isLoadingFeeds || !feeds) return;
+    const currentFeed = feeds.find((feed) => feed.id === feedId);
+    if (!currentFeed) return;
+    const { name, updatedAt } = currentFeed;
+    setHeaderTitle(name);
+    if (
+      !isArticlesRefreshed &&
+      (!updatedAt ||
+        // Refresh if feed was updated more than 30 minutes ago
+        Date.now() - new Date(updatedAt).getTime() > 1000 * 60 * 30)
+    ) {
+      refreshFeed(feedId)
+        .then(() => refreshArticles(feedId))
+        .then((articles: ArticleType[]) => {
+          setIsArticlesRefreshed(true);
+          setArticles(articles);
+        });
+    }
+    setHeaderTitle(name);
+  }, [
+    isLoadingArticles,
+    articles,
+    isLoadingFeeds,
+    feeds,
+    feedId,
+    isArticlesRefreshed,
+    setArticles,
+  ]);
 
   if (isLoadingArticles) return <Loading />;
 
