@@ -1,5 +1,5 @@
 import { NotFoundError } from "@/app/api/errors";
-import { debug } from "@/app/api/logger";
+import * as logger from "@/app/api/logger";
 import { Article, Feed } from "@/types";
 import { ObjectId } from "mongodb";
 import { Repository } from "../Repository";
@@ -19,11 +19,11 @@ export class Articles extends Repository<Article> {
       })
       .toArray();
 
-    debug({ mongoResult }, "mongoResult");
+    logger.debug({ mongoResult }, "mongoResult");
 
     const articlesList = mongoResult.map(mongoToObject<Article>);
 
-    debug({ articlesList }, "articlesList");
+    logger.debug({ articlesList }, "articlesList");
 
     return articlesList;
   }
@@ -42,7 +42,7 @@ export class Articles extends Repository<Article> {
       _id: new ObjectId(feedId),
     });
 
-    debug({ feed }, "feed");
+    logger.info({ feed }, "feed");
 
     if (!feed) {
       throw new NotFoundError("No feed found", { feedId });
@@ -55,14 +55,14 @@ export class Articles extends Repository<Article> {
       feedId,
     });
 
-    debug({ insertedId }, "mongoResult");
+    logger.info({ insertedId }, "mongoResult");
 
     const articleResult = mongoToObject<Article>({
       ...article,
       _id: insertedId,
     });
 
-    debug({ articleResult }, "addArticle result");
+    logger.info({ articleResult }, "createArticle result");
 
     return articleResult;
   }
@@ -80,7 +80,7 @@ export class Articles extends Repository<Article> {
       }),
     );
 
-    debug({ mongoResult }, "mongoResult");
+    logger.debug({ mongoResult }, "mongoResult");
 
     if (!mongoResult) {
       throw new NotFoundError("No article found", { articleId });
@@ -88,7 +88,7 @@ export class Articles extends Repository<Article> {
 
     const article = mongoToObject<Article>(mongoResult);
 
-    debug({ article }, "article");
+    logger.debug({ article }, "article");
 
     return article;
   }
@@ -104,7 +104,7 @@ export class Articles extends Repository<Article> {
       _id: new ObjectId(articleId),
     });
 
-    debug({ mongoResult }, "mongoResult");
+    logger.debug({ mongoResult }, "mongoResult");
 
     if (!mongoResult.deletedCount) {
       throw new NotFoundError("No article found", { articleId });
@@ -134,7 +134,7 @@ export class Articles extends Repository<Article> {
       },
     );
 
-    debug({ mongoResult }, "mongoResult");
+    logger.debug({ mongoResult }, "mongoResult");
 
     if (!mongoResult.matchedCount) {
       throw new NotFoundError("No article found", { articleId });

@@ -22,6 +22,8 @@ export class Repository<T> {
   async update(request: HandlerRequest): Promise<{ id: string }> {
     return { id: "" };
   }
+
+  async execute(request: HandlerRequest): Promise<void> {}
 }
 
 const repositories: {

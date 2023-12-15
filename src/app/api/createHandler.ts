@@ -10,14 +10,16 @@ type MethodToDataType<U> = {
   update: { id: string };
 };
 
-type MethodReturnType<
-  R,
-  M extends "get" | "getAll" | "create" | "delete" | "update",
-> = R extends typeof Repository<infer U> ? MethodToDataType<U>[M] : never;
+type Methods = "get" | "getAll" | "create" | "delete" | "update";
+type MethodReturnType<R, M extends Methods> = R extends typeof Repository<
+  infer U
+>
+  ? MethodToDataType<U>[M]
+  : never;
 
-export function createHandlerFromRepository<
+export function createHandler<
   R extends typeof Repository<unknown>,
-  M extends "get" | "getAll" | "create" | "delete" | "update",
+  M extends Methods,
 >(
   // class type of Repository
   RepositoryClass: R,
@@ -29,12 +31,33 @@ export function createHandlerFromRepository<
       throw new UnauthorizedError("Unauthorized");
     }
     const repository = createRepository(RepositoryClass, user);
+
     const data = (await repository[method](request)) as MethodReturnType<R, M>;
 
     return {
       status: 200,
       data,
       message: `Performed ${method} on ${RepositoryClass.name} successfully`,
+      // infer data type from the method used on the repository
+    } as const;
+  };
+}
+
+export function createHandlerForController<
+  R extends typeof Repository<unknown>,
+>(RepositoryClass: R) {
+  return async (request: NextRequestWithParams) => {
+    const { user } = request;
+    if (!user) {
+      throw new UnauthorizedError("Unauthorized");
+    }
+    const repository = createRepository(RepositoryClass, user);
+
+    await repository.execute(request);
+
+    return {
+      status: 200,
+      message: `Executed ${RepositoryClass.name} successfully`,
       // infer data type from the method used on the repository
     } as const;
   };

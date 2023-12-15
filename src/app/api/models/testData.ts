@@ -48,7 +48,7 @@ export const testFeeds: Feed[] = [
   {
     id: "656328961718a48afe45bf71",
     name: "Hacker News",
-    href: "hackernews.com",
+    href: "https://hnrss.org/newest",
     unread: 0,
     userId: testUser.id,
   },

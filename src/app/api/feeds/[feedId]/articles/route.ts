@@ -1,5 +1,9 @@
-import { createHandlerFromRepository } from "@/app/api/createHandler";
-import { Articles } from "@/app/api/models/articles";
+import { Articles as ArticlesController } from "@/app/api/controllers/articles";
+import {
+  createHandler,
+  createHandlerForController,
+} from "@/app/api/createHandler";
+import { Articles as ArticlesModel } from "@/app/api/models/articles";
 import { toNextEndpoint } from "@/app/api/next";
 
 /**
@@ -7,6 +11,11 @@ import { toNextEndpoint } from "@/app/api/next";
  * @param {string} feedId
  * @returns An array of articles
  */
-export const GET = toNextEndpoint(
-  createHandlerFromRepository(Articles, "getAll"),
+export const GET = toNextEndpoint(createHandler(ArticlesModel, "getAll"));
+
+/**
+ * Refresh all articles for a feed
+ */
+export const POST = toNextEndpoint(
+  createHandlerForController(ArticlesController),
 );

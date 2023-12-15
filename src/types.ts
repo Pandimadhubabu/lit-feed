@@ -37,7 +37,7 @@ export interface Article extends Identifiable {
   image?: Href;
   title: Title;
   summary: Summary;
-  duration: Duration;
+  duration?: Duration;
   isRead: boolean;
   isSaved: boolean;
   content?: string;

@@ -11,7 +11,7 @@ export type HttpResponse = {
 export type NextRequestWithParams = {
   body?: Record<string, unknown>;
   query?: Record<string, unknown>;
-  params?: Record<string, unknown>;
+  params?: Record<string, string>;
   user?: User;
   url?: string;
 };

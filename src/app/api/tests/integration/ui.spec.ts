@@ -1,5 +1,5 @@
 import { Article, Feed } from "@/types";
-import { createHandlerFromRepository } from "../../createHandler";
+import { createHandler } from "../../createHandler";
 import * as logger from "../../logger";
 import { Articles } from "../../models/articles";
 import { Feeds } from "../../models/feeds";
@@ -7,12 +7,12 @@ import { testArticles, testFeeds } from "../../models/testData";
 import { getLocalhostUser } from "../../next";
 
 const user = getLocalhostUser();
-const getArticles = createHandlerFromRepository(Articles, "getAll");
-const deleteArticle = createHandlerFromRepository(Articles, "delete");
-const createArticle = createHandlerFromRepository(Articles, "create");
-const getFeeds = createHandlerFromRepository(Feeds, "getAll");
-const deleteFeed = createHandlerFromRepository(Feeds, "delete");
-const addFeed = createHandlerFromRepository(Feeds, "create");
+const getArticles = createHandler(Articles, "getAll");
+const deleteArticle = createHandler(Articles, "delete");
+const createArticle = createHandler(Articles, "create");
+const getFeeds = createHandler(Feeds, "getAll");
+const deleteFeed = createHandler(Feeds, "delete");
+const addFeed = createHandler(Feeds, "create");
 
 describe("article lifecycle tests", () => {
   test("should create test data for testing the UI", async () => {
