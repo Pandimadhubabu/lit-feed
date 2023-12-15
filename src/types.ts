@@ -22,6 +22,7 @@ export type Email = string;
 export type Duration = string;
 export interface Feed extends Identifiable {
   id: ID;
+  userId: User["id"];
   image?: Href;
   href: Href;
   name: Name;

@@ -6,7 +6,13 @@ import { Repository } from "../Repository";
 import { feeds, mongoToObject } from "../mongo";
 export class Feeds extends Repository<Feed> {
   async create({ body }: { body: Feed }): Promise<Feed> {
-    const feed = Object.assign({}, body);
+    const feed = Object.assign(
+      {},
+      {
+        ...body,
+        userId: this.user.id,
+      },
+    );
     const feedsCollection = await feeds();
 
     const { insertedId } = await feedsCollection.insertOne(feed);
@@ -31,6 +37,7 @@ export class Feeds extends Repository<Feed> {
     const feedsCollection = await feeds();
 
     const mongoResult = await feedsCollection.findOne({
+      userId: this.user.id,
       _id: new ObjectId(feedId),
     });
 
@@ -50,7 +57,11 @@ export class Feeds extends Repository<Feed> {
   async getAll(): Promise<Feed[]> {
     const feedsCollection = await feeds();
 
-    const mongoResult = await feedsCollection.find().toArray();
+    const mongoResult = await feedsCollection
+      .find({
+        userId: this.user.id,
+      })
+      .toArray();
 
     logger.debug({ mongoResult }, "mongoResult");
 
@@ -65,6 +76,7 @@ export class Feeds extends Repository<Feed> {
     const feedsCollection = await feeds();
 
     const mongoResult = await feedsCollection.deleteOne({
+      userId: this.user.id,
       _id: new ObjectId(feedId),
     });
 
@@ -91,6 +103,7 @@ export class Feeds extends Repository<Feed> {
 
     const mongoResult = await feedsCollection.updateOne(
       {
+        userId: this.user.id,
         _id: new ObjectId(feedId),
       },
       {

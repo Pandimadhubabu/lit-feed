@@ -25,6 +25,7 @@ jest.mock("../mongo", () => ({
 
 const articles = createRepository(Articles, testUser);
 describe("index.ts tests", () => {
+  let articleId: Article["id"];
   test("getAllArticles should return an array", async () => {
     const feed = testFeeds[0];
     const articlesList = await articles.getAll({ params: { feedId: feed.id } });
@@ -38,31 +39,30 @@ describe("index.ts tests", () => {
       params: { feedId: feed.id },
       body: article,
     });
+    articleId = result.id;
     expect(typeof result).toBe("object");
   });
 
   test("getArticle should return an object", async () => {
-    const articleId: Article["id"] = "testId";
     const article = await articles.get({
       params: { articleId: articleId },
     });
     expect(typeof article).toBe("object");
   });
 
-  test("deleteArticle should return an id", async () => {
-    const articleId: Article["id"] = testArticles[0].id;
-    const { id } = await articles.delete({
-      params: { articleId: articleId },
-    });
-    expect(id).toBe(articleId);
-  });
-
   test("updateArticle should return an object with matchedCount and modifiedCount", async () => {
     const article = testArticles[0];
     const result = await articles.update({
-      params: { articleId: article.id },
+      params: { articleId },
       body: article,
     });
     expect(result).toEqual({ id: article.id });
+  });
+
+  test("deleteArticle should return an id", async () => {
+    const { id } = await articles.delete({
+      params: { articleId },
+    });
+    expect(id).toBe(articleId);
   });
 });

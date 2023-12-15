@@ -2,6 +2,8 @@
 
 exports[` 1`] = `"Performed delete on Feeds successfully"`;
 
+exports[`feed lifecycle tests feed lifecycle tests for another user should not be able to get feeds for another user 1`] = `"Performed getAll on Feeds successfully"`;
+
 exports[`feed lifecycle tests should be able to add a new feed 1`] = `"Performed create on Feeds successfully"`;
 
 exports[`feed lifecycle tests should be able to add a second feed 1`] = `"Performed create on Feeds successfully"`;

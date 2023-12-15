@@ -7,4 +7,4 @@ import { toNextEndpoint } from "@/app/api/next";
  * @param {string} feedId
  * @returns An array of articles
  */
-export const GET = toNextEndpoint(createHandler(Articles, "get"));
+export const GET = toNextEndpoint(createHandler(Articles, "getAll"));

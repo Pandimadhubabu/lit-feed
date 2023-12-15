@@ -2,8 +2,9 @@ import { Article, Feed } from "@/types";
 import { createHandler } from "../../createHandler";
 import * as logger from "../../logger";
 import { Articles } from "../../models/articles";
-import { getLocalhostUser } from "../../next";
 import { Feeds } from "../../models/feeds";
+import { testArticles, testFeeds } from "../../models/testData";
+import { getLocalhostUser } from "../../next";
 
 const user = getLocalhostUser();
 const getArticles = createHandler(Articles, "getAll");
@@ -43,7 +44,7 @@ describe("article lifecycle tests", () => {
       allArticles.map(async (article: Article) => {
         const { data, message } = await deleteArticle({
           params: {
-            id: article.id,
+            articleId: article.id,
           },
           user,
         });
@@ -63,35 +64,14 @@ describe("article lifecycle tests", () => {
           user,
         });
 
-        expect(message).toBe("Feed deleted");
+        expect(message).toBe("Performed delete on Feeds successfully");
         expect(data.id).toBe(feed.id);
       }),
     );
 
-    const feeds = [
-      {
-        id: "656328861718a48afe45bf70",
-        name: "Stackoverflow Blog",
-        href: "stackoverflow.com",
-        unread: 1,
-      },
-      {
-        id: "656328961718a48afe45bf71",
-        name: "Hacker News",
-        href: "hackernews.com",
-        unread: 0,
-      },
-      {
-        id: "656328a61718a48afe45bf72",
-        name: "Martin Fowler",
-        href: "martinfowler.com",
-        unread: 0,
-      },
-    ];
-
-    for (const feed of feeds) {
+    for (const feed of testFeeds) {
       const { data, message } = await addFeed({
-        body: feed,
+        body: feed as {},
         user,
       });
       logger.info({ data }, message);
@@ -99,35 +79,8 @@ describe("article lifecycle tests", () => {
       feedNames.push(data.name);
     }
 
-    const articles = [
-      {
-        title: "Can LLMs learn from a single example?",
-        summary: `I've been working on a new approach to few-shot learning, and I'm excited to share some results.`,
-        href: "https://www.fast.ai/posts/2023-09-04-learning-jumps/",
-        feedName: "Hacker News",
-        duration: "1h",
-        date: "Wed, 6 Sep 2023 00:40:05 +0000",
-        id: "1",
-        feedId: "1",
-        isRead: false,
-        isSaved: false,
-      },
-      {
-        title: "Fine-grained caching strategies of dynamic queries",
-        summary: `Today I would like to talk about caching strategies for aggregate queries over time-based data which is updated often`,
-        href: "https://jensrantil.github.io/posts/fast-aggregate-queries-on-dynamic-data",
-        feedName: "Hacker News",
-        duration: "1h",
-        date: "Wed, 20 Sep 2023 17:42:24 +0000",
-        id: "2",
-        feedId: "1",
-        isRead: true,
-        isSaved: false,
-      },
-    ];
-
     for (const feedId of feedIds) {
-      for (const article of articles) {
+      for (const article of testArticles) {
         const { data, message } = await createArticle({
           body: {
             ...article,

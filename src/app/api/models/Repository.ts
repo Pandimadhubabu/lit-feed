@@ -1,7 +1,7 @@
 import { User } from "@/types";
 
 export class Repository<T> {
-  constructor(private user: User) {}
+  constructor(protected user: User) {}
 
   async get(request: HandlerRequest): Promise<T> {
     return {} as T;

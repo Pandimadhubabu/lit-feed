@@ -5,6 +5,10 @@ import { Feeds } from "../../models/feeds";
 import { createHandler } from "../../createHandler";
 
 const user = testUser;
+const secondUser = {
+  ...testUser,
+  id: "245b23984f233d32b233f2f4",
+};
 
 const getFeeds = createHandler(Feeds, "getAll");
 const deleteFeed = createHandler(Feeds, "delete");
@@ -104,6 +108,37 @@ describe("feed lifecycle tests", () => {
     expect(data.map((feed: Feed) => omit(feed, ["id"]))).toEqual(
       testFeeds.map((feed: Feed) => omit(feed, ["id"])),
     );
+  });
+
+  describe("feed lifecycle tests for another user", () => {
+    test("should not be able to get feeds for another user", async () => {
+      const { data, message } = await getFeeds({ user: secondUser });
+
+      expect(message).toMatchSnapshot();
+      expect(data).toEqual([]);
+    });
+
+    test("should not be able to get a feed for another user", async () => {
+      expect(
+        getFeed({ params: { feedId: testFeeds[0].id }, user: secondUser }),
+      ).rejects.toThrow(`No feed found`);
+    });
+
+    test("should not be able to update a feed for another user", async () => {
+      expect(
+        updateFeed({
+          params: { feedId: testFeeds[0].id },
+          body: { ...testFeeds[0], name: "new name" },
+          user: secondUser,
+        }),
+      ).rejects.toThrow(`No feed found to update`);
+    });
+
+    test("should not be able to delete a feed for another user", async () => {
+      expect(
+        deleteFeed({ params: { feedId: testFeeds[0].id }, user: secondUser }),
+      ).rejects.toThrow(`No feed found to delete`);
+    });
   });
 
   test("should be able to delete a feed", async () => {
