@@ -1,10 +1,10 @@
 import { Article, Feed } from "@/types";
-import { createHandler } from "../../createHandler";
-import * as logger from "../../logger";
-import { Articles } from "../../models/articles";
-import { Feeds } from "../../models/feeds";
-import { testArticles, testFeeds } from "../../models/testData";
-import { getLocalhostUser } from "../../next";
+import { createHandler } from "../createHandler";
+import * as logger from "../logger";
+import { Articles } from "../models/articles";
+import { Feeds } from "../models/feeds";
+import { testArticles, testFeeds } from "../models/testData";
+import { getLocalhostUser } from "../next";
 
 const user = getLocalhostUser();
 const getArticles = createHandler(Articles, "getAll");
