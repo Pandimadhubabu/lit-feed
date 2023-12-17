@@ -17,9 +17,9 @@ export type PageLink = string;
 export type Href = string;
 export type Title = string;
 export type Summary = string;
-export type DateTime = string;
 export type Email = string;
 export type Duration = string;
+export type DateTime = string;
 export interface Feed extends Identifiable {
   id: ID;
   userId: User["id"];
@@ -27,7 +27,7 @@ export interface Feed extends Identifiable {
   href: Href;
   name: Name;
   unread: number;
-  updatedAt: Date;
+  updatedAt: DateTime;
 }
 
 export interface Article extends Identifiable {
@@ -42,7 +42,7 @@ export interface Article extends Identifiable {
   isRead: boolean;
   isSaved: boolean;
   content?: string;
-  date: string;
+  date?: DateTime;
 }
 
 export interface User extends Identifiable {
@@ -53,7 +53,7 @@ export interface User extends Identifiable {
   oauthId: string;
   isEmailVerified: boolean;
   nickname: string;
-  updatedAt: Date;
+  updatedAt: DateTime;
 }
 
 export interface Identifiable {

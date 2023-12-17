@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 export function useApi(
   arg: {
@@ -15,7 +15,12 @@ export function useApi(
     if (required.length !== 0 && !required.every((r) => r)) {
       return;
     }
-    fetch(path, options)
+    fetch(path, {
+      ...options,
+      headers: {
+        Authorization: `Bearer `,
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           if (response.status === 401) {

@@ -144,7 +144,7 @@ export function getLocalhostUser(): User {
     id: "localhostUser",
     email: localhostClaims.email,
     isEmailVerified: localhostClaims.email_verified === "true",
-    updatedAt: new Date(localhostClaims.updated_at),
+    updatedAt: localhostClaims.updated_at,
     name: localhostClaims.name,
     nickname: localhostClaims.nickname,
     picture: localhostClaims.picture,

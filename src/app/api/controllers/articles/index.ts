@@ -1,9 +1,9 @@
-import { Article, Feed, User } from "@/types";
+import { Article, Feed } from "@/types";
 import * as logger from "../../logger";
 import { Repository, createRepository } from "../../models/Repository";
 import { Articles } from "../../models/articles";
 import { Feeds } from "../../models/feeds";
-import { XMLParser } from "fast-xml-parser";
+import { ParsedArticle, getParsedArticles } from "./rssParser";
 
 export class ArticlesController extends Repository<Article> {
   async execute({
@@ -18,12 +18,12 @@ export class ArticlesController extends Repository<Article> {
 
     const oldArticles = await articlesRepository.getAll({ params: { feedId } });
 
-    const partialArticles = await getPartialArticles(feed.href);
+    const parsedArticles = await getParsedArticles(feed.href);
 
-    const newArticles = partialArticles.filter(
-      (partialArticle) =>
+    const newArticles = parsedArticles.filter(
+      (parsedArticle) =>
         !oldArticles.find(
-          (oldArticle) => oldArticle.href === partialArticle.href,
+          (oldArticle) => oldArticle.href === parsedArticle.href,
         ),
     );
 
@@ -33,10 +33,11 @@ export class ArticlesController extends Repository<Article> {
     }
 
     const articles = await enrichPartialArticles({
-      partialArticles: newArticles,
+      parsedArticles: newArticles,
       feed,
     });
 
+    logger.debug({ articles }, "Enriched articles");
     const result: Article[] = [];
     for (const article of articles) {
       article.feedId = feed.id;
@@ -55,7 +56,7 @@ export class ArticlesController extends Repository<Article> {
       params: { feedId },
       body: {
         ...feed,
-        updatedAt: new Date(),
+        updatedAt: new Date().toISOString(),
       },
     });
 
@@ -64,68 +65,18 @@ export class ArticlesController extends Repository<Article> {
 }
 
 function enrichPartialArticles({
-  partialArticles,
+  parsedArticles,
   feed,
 }: {
-  partialArticles: PartialArticle[];
+  parsedArticles: ParsedArticle[];
   feed: Feed;
 }): Article[] {
-  const articles: Article[] = [];
-  for (const partialArticle of partialArticles) {
-    const article: Article = {
-      ...partialArticle,
-      feedId: feed.id,
-      isRead: false,
-      isSaved: false,
-      feedName: feed.name,
-      id: "",
-    };
-
-    articles.push(article);
-  }
-
-  logger.debug({ articles }, "Enriched articles");
-  return articles;
+  return parsedArticles.map((parsedArticle) => ({
+    ...parsedArticle,
+    feedId: feed.id,
+    isRead: false,
+    isSaved: false,
+    feedName: feed.name,
+    id: "",
+  }));
 }
-
-async function getPartialArticles(url: string): Promise<PartialArticle[]> {
-  logger.debug({ url }, "Fetching articles from feed");
-  const rss = await fetch(url);
-
-  const rssText = await rss.text();
-  logger.debug({ rssText }, "Fetched articles from feed");
-
-  return rssToArticles(rssText);
-}
-
-export function rssToArticles(rss: string): PartialArticle[] {
-  const parser = new XMLParser();
-  const jsonObj = parser.parse(rss);
-
-  const items = jsonObj.rss.channel.item;
-
-  const articles: PartialArticle[] = [];
-
-  for (const item of items) {
-    const article: PartialArticle = {
-      title: item.title,
-      summary: item.description,
-      href: item.link,
-      date: item.pubDate,
-      image: item.image,
-    };
-    articles.push(article);
-  }
-
-  logger.debug({ articles }, "Parsed articles from feed");
-
-  return articles;
-}
-
-type PartialArticle = Partial<Article> & {
-  title: string;
-  summary: string;
-  href: string;
-  date: string;
-  image?: string;
-};
