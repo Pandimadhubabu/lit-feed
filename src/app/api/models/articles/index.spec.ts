@@ -6,6 +6,8 @@ import { Article, Feed } from "@/types";
 jest.mock("../mongo", () => ({
   articles: jest.fn().mockResolvedValue({
     find: jest.fn().mockReturnValue({
+      sort: jest.fn().mockReturnThis(),
+      limit: jest.fn().mockReturnThis(),
       toArray: jest.fn().mockResolvedValue(testArticles),
     }),
     findOne: jest.fn().mockResolvedValue(testArticles[0]),

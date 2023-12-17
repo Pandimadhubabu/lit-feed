@@ -11,7 +11,6 @@ export class Feeds extends Repository<Feed> {
       {
         ...body,
         userId: this.user.id,
-        updatedAt: new Date(),
       },
     );
     const feedsCollection = await feeds();

@@ -29,6 +29,7 @@ export const testFeeds: Feed[] = [
     userId: testUser.id,
     id: "6520691d42b827145292f2f1",
     name: "programming",
+    updatedAt: new Date("2020-01-01T00:00:00.000Z"),
     unread: 0,
   },
   {
@@ -36,6 +37,7 @@ export const testFeeds: Feed[] = [
     userId: testUser.id,
     id: "6520691d42b827145292f2f2",
     name: "javascript",
+    updatedAt: new Date("2020-01-01T00:00:00.000Z"),
     unread: 0,
   },
   {
@@ -43,11 +45,13 @@ export const testFeeds: Feed[] = [
     name: "Stackoverflow Blog",
     href: "stackoverflow.com",
     unread: 1,
+    updatedAt: new Date("2020-01-01T00:00:00.000Z"),
     userId: testUser.id,
   },
   {
     id: "656328961718a48afe45bf71",
     name: "Hacker News",
+    updatedAt: new Date("2020-01-01T00:00:00.000Z"),
     href: "https://hnrss.org/newest",
     unread: 0,
     userId: testUser.id,
@@ -58,6 +62,7 @@ export const testFeeds: Feed[] = [
     href: "martinfowler.com",
     unread: 0,
     userId: testUser.id,
+    updatedAt: new Date("2020-01-01T00:00:00.000Z"),
   },
 ];
 

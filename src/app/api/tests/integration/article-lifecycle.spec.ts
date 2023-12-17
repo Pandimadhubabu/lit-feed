@@ -127,7 +127,11 @@ describe("article lifecycle tests", () => {
     });
 
     expect(message).toMatchSnapshot();
-    expect(data).toEqual(testArticles);
+    expect(data).toEqual(
+      testArticles.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      ),
+    );
   });
 
   test("should be able to delete an article", async () => {

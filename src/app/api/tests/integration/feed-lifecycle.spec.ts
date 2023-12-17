@@ -82,7 +82,9 @@ describe("feed lifecycle tests", () => {
     });
 
     expect(message).toMatchSnapshot();
-    expect(omit(data, ["id"])).toEqual(omit(testFeeds[0], ["id"]));
+    expect(omit(data, ["id", "updatedAt"])).toEqual(
+      omit(testFeeds[0], ["id", "updatedAt"]),
+    );
   });
 
   test("should be able to add a second feed", async () => {
@@ -105,8 +107,10 @@ describe("feed lifecycle tests", () => {
 
     expect(message).toMatchSnapshot();
 
-    expect(data.map((feed: Feed) => omit(feed, ["id"]))).toEqual(
-      testFeeds.map((feed: Feed) => omit(feed, ["id"])),
+    expect(data.map((feed: Feed) => omit(feed, ["id", "updatedAt"]))).toEqual(
+      testFeeds
+        .slice(0, 2)
+        .map((feed: Feed) => omit(feed, ["id", "updatedAt"])),
     );
   });
 
