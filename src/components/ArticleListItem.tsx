@@ -23,7 +23,7 @@ export function ArticleListItem({
         {!!article.summary && (
           <p
             id="summary"
-            className="dark:text-gray-400 text-gray-800 flex-auto text-xs h-12 overflow-hidden"
+            className="dark:text-gray-400 text-gray-800 flex-auto text-xs h-12 overflow-hidden pointer-events-none"
             dangerouslySetInnerHTML={{ __html: article.summary }}
           ></p>
         )}
