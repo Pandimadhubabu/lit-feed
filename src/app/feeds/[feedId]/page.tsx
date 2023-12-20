@@ -7,6 +7,7 @@ import type { Article as ArticleType } from "@/types";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ArticleListItem } from "../../../components/ArticleListItem";
 
 async function refreshFeed(feedId: string) {
   const response = await fetch(`/api/feeds/${feedId}/refresh`, {
@@ -112,7 +113,7 @@ export default function Feed() {
     <Shell headerTitle={headerTitle}>
       {/* Main content */}
       <div className="grid lg:grid-cols-3 lg:grid-rows-1 lg:gap-4">
-        <aside className="dark:bg-gray-800 bg-gray-400 lg:bottom-0 lg:left-0 lg:top-16 lg:overflow-y-auto lg:border-l lg:border-white/5 xl:left-auto">
+        <aside className="dark:bg-gray-800 w-full bg-gray-400 lg:bottom-0 lg:left-0 lg:top-16 lg:overflow-y-auto lg:border-l lg:border-white/5 xl:left-auto">
           <ul role="list" className="divide-y divide-white/5">
             {articles.map((article, index) =>
               isLargeScreen ? (
@@ -153,49 +154,5 @@ export default function Feed() {
         )}
       </div>
     </Shell>
-  );
-}
-
-function ArticleListItem({
-  article,
-  isSelected,
-}: {
-  article: ArticleType;
-  isSelected: boolean;
-}) {
-  return (
-    <li
-      className={`${
-        isSelected
-          ? "dark:bg-gray-700 bg-gray-300"
-          : "dark:bg-gray-800 bg-gray-100 hover:bg-gray-700"
-      } px-4 py-4 sm:px-6 lg:px-8 cursor-pointer`}
-    >
-      <div className="flex items-center flex-col gap-x-3">
-        <h3 className="dark:text-white text-black flex-auto w-full truncate text-sm font-semibold leading-6">
-          {article.title}
-        </h3>
-        {!!article.summary && (
-          <p
-            id="summary"
-            className="dark:text-gray-400 text-gray-800 flex-auto w-full truncate text-xs"
-          >
-            {article.summary}
-          </p>
-        )}
-      </div>
-      <p className="dark:text-gray-500 text-gray-800 mt-3 truncate text-sm">
-        Published on{" "}
-        <span className="dark:text-gray-400 text-gray-800">
-          {article.feedName}
-        </span>
-        <time
-          dateTime={article.date}
-          className="dark:text-gray-600 text-gray-900 flex-none text-xs m-2"
-        >
-          {article.date}
-        </time>
-      </p>
-    </li>
   );
 }
