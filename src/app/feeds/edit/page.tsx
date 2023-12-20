@@ -47,7 +47,7 @@ export default function Edit() {
     });
   }
 
-  if (isLoading) {
+  if (isLoading || !feeds) {
     return (
       <Shell headerTitle="Edit Feeds">
         <Loading />

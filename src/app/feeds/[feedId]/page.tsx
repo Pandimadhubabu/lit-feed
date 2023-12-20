@@ -86,7 +86,7 @@ export default function Feed() {
     setArticles,
   ]);
 
-  if (isLoadingArticles) return <Loading />;
+  if (isLoadingArticles || !articles) return <Loading />;
 
   if (articlesError)
     return (
