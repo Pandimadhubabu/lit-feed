@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArticleListItem } from "../../../components/ArticleListItem";
+import ArticleContent from "@/components/ArticleContent";
 
 async function refreshFeed(feedId: string) {
   const response = await fetch(`/api/feeds/${feedId}/refresh`, {
@@ -28,7 +29,9 @@ async function refreshArticles(feedId: string) {
 export default function Feed() {
   const [headerTitle, setHeaderTitle] = useState("");
   const [isArticlesRefreshed, setIsArticlesRefreshed] = useState(false);
-  const [selectedArticle, setSelectedArticle] = useState<undefined | number>();
+  const [selectedArticleIndex, setSelectedArticleIndex] = useState<
+    undefined | number
+  >();
   const [isLargeScreen, setIsLargeScreen] = useState(
     typeof window === "undefined"
       ? false
@@ -114,6 +117,7 @@ export default function Feed() {
     );
   }
 
+  const selectedArticle = articles[selectedArticleIndex ?? 0];
   return (
     <Shell headerTitle={headerTitle}>
       {/* Main content */}
@@ -122,17 +126,20 @@ export default function Feed() {
           <ul role="list" className="divide-y divide-white/5">
             {articles.map((article, index) =>
               isLargeScreen ? (
-                <div onClick={() => setSelectedArticle(index)} key={article.id}>
+                <div
+                  onClick={() => setSelectedArticleIndex(index)}
+                  key={article.id}
+                >
                   <ArticleListItem
                     article={article}
-                    isSelected={selectedArticle === index}
+                    isSelected={selectedArticleIndex === index}
                   />
                 </div>
               ) : (
                 <Link href={`/articles/${article.id}`} key={article.id}>
                   <ArticleListItem
                     article={article}
-                    isSelected={selectedArticle === index}
+                    isSelected={selectedArticleIndex === index}
                   />
                 </Link>
               )
@@ -140,21 +147,12 @@ export default function Feed() {
           </ul>
         </aside>
         {isLargeScreen && (
-          // Show article on large screens on the right
           <div
             className={`mt-2 mr-3 col-span-2 ${
-              selectedArticle !== undefined ? "flex" : "hidden"
+              selectedArticleIndex !== undefined ? "flex" : "hidden"
             }`}
           >
-            <p
-              className="text-white dark:text-gray-300 text-justify"
-              dangerouslySetInnerHTML={{
-                __html:
-                  articles[selectedArticle ?? 0].content ??
-                  articles[selectedArticle ?? 0].summary ??
-                  "",
-              }}
-            ></p>
+            <ArticleContent {...selectedArticle} />
           </div>
         )}
       </div>
