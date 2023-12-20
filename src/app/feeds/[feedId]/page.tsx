@@ -87,7 +87,12 @@ export default function Feed() {
     setArticles,
   ]);
 
-  if (isLoadingArticles || !articles) return <Loading />;
+  if (isLoadingArticles || !articles)
+    return (
+      <Shell headerTitle={headerTitle}>
+        <Loading />
+      </Shell>
+    );
 
   if (articlesError)
     return (

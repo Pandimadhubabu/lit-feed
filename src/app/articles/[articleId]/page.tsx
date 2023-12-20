@@ -2,6 +2,7 @@
 import { Loading } from "@/components/Loading";
 import Shell from "@/components/Shell";
 import { useArticle } from "@/hooks/useArticle";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 
 export default function Article() {
@@ -16,33 +17,36 @@ export default function Article() {
   });
 
   if (isLoadingArticle) {
-    return <Loading />;
+    return (
+      <Shell headerTitle="Article">
+        <Loading />
+      </Shell>
+    );
   }
 
   if (articlesError) {
-    return <p>Error: {articlesError.message}</p>;
+    return (
+      <Shell headerTitle="Article failed to load">
+        <p>Error: {articlesError.message}</p>
+      </Shell>
+    );
   }
 
   if (!article) {
-    return <p>Article not found</p>;
+    return (
+      <Shell headerTitle="Article not found">
+        <p>Article not found</p>
+      </Shell>
+    );
   }
 
-  const {
-    title,
-    content,
-    summary,
-    feedName,
-    href,
-    isRead,
-    isSaved,
-    date,
-    image,
-  } = article;
+  const { title, content, summary, feedName, href, feedId, date, image } =
+    article;
   const description = content || summary || "";
 
   return (
     <Shell headerTitle={feedName}>
-      <div className="flex flex-col gap-y-5">
+      <div className="flex flex-col gap-y-5 p-4">
         <a href={href} target="_blank" rel="noopener noreferrer">
           <h1 className="text-3xl font-bold">{title}</h1>
         </a>
@@ -60,21 +64,13 @@ export default function Article() {
           className="prose dark:prose-dark max-w-none"
           dangerouslySetInnerHTML={{ __html: description }}
         />
-      </div>
-
-      <div className="flex justify-between mt-5">
-        <button
-          type="button"
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white dark:bg-gray-800 bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
+        {/** Back button with an array pointing left, on the right bottom side of the screen */}
+        <Link
+          href={`/feeds/${feedId}`}
+          className="fixed bottom-4 right-4 p-2 rounded-full text-sm"
         >
-          Mark as {isRead ? "unread" : "read"}
-        </button>
-        <button
-          type="button"
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white dark:bg-gray-800 bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-        >
-          {isSaved ? "Unsave" : "Save"}
-        </button>
+          &larr; Back to feed
+        </Link>
       </div>
     </Shell>
   );
