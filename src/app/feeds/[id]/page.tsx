@@ -53,14 +53,15 @@ export default function Feed() {
     setHeaderTitle(name);
     if (
       !isArticlesRefreshed &&
-      (!updatedAt ||
+      (!articles.length ||
+        !updatedAt ||
         // Refresh if feed was updated more than 30 minutes ago
         Date.now() - new Date(updatedAt).getTime() > 1000 * 60 * 30)
     ) {
+      setIsArticlesRefreshed(true);
       refreshFeed(feedId)
         .then(() => refreshArticles(feedId))
         .then((articles: ArticleType[]) => {
-          setIsArticlesRefreshed(true);
           setArticles(articles);
         });
     }

@@ -1,5 +1,5 @@
 import {
-  getDescription,
+  getSummary,
   getLink,
   getParsedArticles,
   getRSSItems,
@@ -54,7 +54,7 @@ describe("RSS Parser", () => {
 
   describe("getDescription", () => {
     it("should get the description", () => {
-      const result = getDescription({
+      const result = getSummary({
         description: "description",
       });
 
@@ -62,7 +62,7 @@ describe("RSS Parser", () => {
     });
 
     it("should get a similar field", () => {
-      const result = getDescription({
+      const result = getSummary({
         "description 2": "description",
       });
 
@@ -70,7 +70,7 @@ describe("RSS Parser", () => {
     });
 
     it("should throw if no description is found", () => {
-      expect(() => getDescription({})).toThrow("No description found");
+      expect(() => getSummary({})).toThrow("No description found");
     });
   });
 

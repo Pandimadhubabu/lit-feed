@@ -122,10 +122,15 @@ export function Sidebar() {
           <li>
             <div className="flex justify-between text-xs font-semibold leading-6 text-gray-400">
               Your feeds
-              <PencilSquareIcon
-                className="h-4 w-4 ml-1.5 text-gray-400"
-                aria-hidden="true"
-              />
+              <Link
+                href="/feeds/edit"
+                className="text-gray-400 hover:text-white hover:bg-gray-800 rounded-md p-1"
+              >
+                <PencilSquareIcon
+                  className="h-4 w-4 ml-1.5 text-gray-400"
+                  aria-hidden="true"
+                />
+              </Link>
             </div>
             <ul role="list" className="-mx-2 mt-2 space-y-1">
               {isFeedLoading

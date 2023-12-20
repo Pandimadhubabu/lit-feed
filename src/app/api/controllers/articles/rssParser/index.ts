@@ -2,17 +2,40 @@ import { Article } from "@/types";
 import { XMLParser } from "fast-xml-parser";
 import * as logger from "../../../logger";
 import { ServerError } from "@/app/api/errors";
+import RSSParser from "rss-parser";
+
+type RSSFeed = {
+  title: string;
+  link: string;
+  description: string;
+  image: string;
+  item: RSSItem[];
+};
+
+type RSSItem = {
+  title: string;
+  link: string;
+  pubDate: string;
+  date: string;
+  image: string;
+  [key: string]: string;
+};
 
 export async function getParsedArticles(url: string): Promise<ParsedArticle[]> {
   logger.debug({ url }, "Fetching articles from feed");
-  const rssResponse = await fetch(url);
 
-  const rssText = await rssResponse.text();
-  logger.debug({ rssText }, "Fetched articles from feed");
+  const rssParser: RSSParser<RSSFeed, RSSItem> = new RSSParser({
+    customFields: {
+      feed: ["image"],
+      item: ["image"],
+    },
+  });
 
-  const rss = new XMLParser().parse(rssText);
+  const rssFeed = await rssParser.parseURL(url);
 
-  const rssItems = getRSSItems(rss);
+  const rssItems = rssFeed.items;
+
+  logger.debug({ rssItems }, "Fetched articles from feed");
 
   return rssToArticles(rssItems);
 }
@@ -20,7 +43,8 @@ export async function getParsedArticles(url: string): Promise<ParsedArticle[]> {
 export function rssToArticles(rss: RSSItem[]): ParsedArticle[] {
   const articles: ParsedArticle[] = rss.map((item: RSSItem) => ({
     title: getTitle(item),
-    summary: getDescription(item),
+    summary: getSummary(item),
+    content: getContent(item),
     href: getLink(item),
     date: getDate(item),
     image: getImage(item),
@@ -40,13 +64,32 @@ export function getTitle(item: RSSItem) {
   return title;
 }
 
-export function getDescription(item: RSSItem) {
-  const description = getSimilarField(item, "description");
+export function getSummary(item: RSSItem) {
+  const description =
+    getSimilarField(item, "description") ||
+    getSimilarField(item, "summary") ||
+    getSimilarField(item, "subtitle") ||
+    getSimilarField(item, "contentSnippet") ||
+    getSimilarField(item, "content");
 
   if (!description) {
     throw new ServerError("No description found", { item });
   }
   return description;
+}
+
+export function getContent(item: RSSItem) {
+  const content =
+    getSimilarField(item, "content") ||
+    getSimilarField(item, "contentSnippet") ||
+    getSimilarField(item, "summary") ||
+    getSimilarField(item, "description") ||
+    getSimilarField(item, "subtitle");
+
+  if (!content) {
+    throw new ServerError("No content found", { item });
+  }
+  return content;
 }
 
 export function getLink(item: RSSItem) {
@@ -69,40 +112,15 @@ export function getDate(item: RSSItem) {
   return getSimilarField(item, "date");
 }
 
-export function getSimilarField(item: RSSItem, field: string) {
+export function getSimilarField(item: RSSItem, field: keyof RSSItem) {
   if (item[field]) {
     return item[field];
   }
-  const keys = Object.keys(item);
-
-  for (const key of keys) {
-    if (key.match(new RegExp(field, "i"))) {
-      return item[key];
+  for (const [key, value] of Object.entries(item)) {
+    if (key.match(new RegExp(field as never, "i"))) {
+      return value;
     }
   }
-}
-
-export function getRSSItems(rssInput: Record<string, any>): RSSItem[] {
-  const rss = rssInput?.rss || rssInput?.feed || rssInput?.rdf || rssInput;
-  if (rss?.channel?.item) {
-    return rss.channel.item;
-  }
-  if (rss?.item) {
-    return rss.item;
-  }
-  if (rss?.channel?.entry) {
-    return rss.channel.entry;
-  }
-  if (rss?.entry) {
-    return rss.entry;
-  }
-  if (rss?.channel?.items) {
-    return rss.channel.items;
-  }
-  if (rss?.items) {
-    return rss.items;
-  }
-  throw new ServerError("No items found", { rss });
 }
 
 export type ParsedArticle = Partial<Article> & {
@@ -110,5 +128,3 @@ export type ParsedArticle = Partial<Article> & {
   summary: string;
   href: string;
 };
-
-type RSSItem = Record<string, string>;
