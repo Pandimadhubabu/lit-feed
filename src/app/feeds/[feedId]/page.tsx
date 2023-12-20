@@ -31,8 +31,7 @@ export default function Feed() {
   const [selectedArticle, setSelectedArticle] = useState(0);
   const [headerTitle, setHeaderTitle] = useState("");
   const [isArticlesRefreshed, setIsArticlesRefreshed] = useState(false);
-  const { id } = useParams();
-  const feedId = id as Exclude<typeof id, string[]>;
+  const { feedId } = useParams() as { feedId: string };
 
   const { feeds, isLoading: isLoadingFeeds, error: feedsError } = useFeeds();
 
