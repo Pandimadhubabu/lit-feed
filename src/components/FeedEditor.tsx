@@ -33,27 +33,60 @@ export function FeedEditor({
     [feedArg]
   );
 
+  // Cancel if escape key is pressed
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
+  const saveFeed = useMemo(
+    () => async () => {
+      setIsSaving(true);
+      const response = await fetch(`/api/feeds/${feedArg ? feedArg.id : ""}`, {
+        method: feedArg ? "PATCH" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          href,
+        }),
+      });
+      setIsSaving(false);
+      setIsSaved(true);
+      onSaved();
+    },
+    [feedArg, name, href, onSaved]
+  );
+
+  // Save if enter key is pressed
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Enter") {
+        saveFeed();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [saveFeed]);
+
   useEffect(() => {
     setName(feed.name);
     setHref(feed.href);
   }, [feed]);
-
-  async function saveFeed() {
-    setIsSaving(true);
-    const response = await fetch(`/api/feeds/${feedArg ? feedArg.id : ""}`, {
-      method: feedArg ? "PATCH" : "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        href,
-      }),
-    });
-    setIsSaving(false);
-    setIsSaved(true);
-    onSaved();
-  }
 
   return (
     <div className="fixed inset-0 overflow-hidden">

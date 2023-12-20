@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 export function useApi(
   arg: {
@@ -8,13 +8,21 @@ export function useApi(
     setIsLoading: (isLoading: boolean) => void;
     setError: (error: Error | null) => void;
   },
-  required: any[],
+  monitor: any[],
 ) {
+  const [previousMonitoredValue, setPreviousMonitoredValue] = useState<
+    any[] | undefined
+  >(undefined);
   const { path, options, setData, setIsLoading, setError } = arg;
   useMemo(() => {
-    if (required.length !== 0 && !required.every((r) => r)) {
+    if (
+      previousMonitoredValue &&
+      areArraysExactlyTheSame(previousMonitoredValue, monitor)
+    ) {
+      console.log("skipping", monitor);
       return;
     }
+    setPreviousMonitoredValue(monitor);
     fetch(path, {
       ...options,
       headers: {
@@ -42,5 +50,12 @@ export function useApi(
         setError(error);
         setIsLoading(false);
       });
-  }, [path]);
+  }, [path, ...monitor]);
+}
+
+function areArraysExactlyTheSame<T>(a: T[], b: T[]) {
+  if (a.length !== b.length) {
+    return false;
+  }
+  return a.every((item, index) => item === b[index]);
 }

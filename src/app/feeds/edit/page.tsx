@@ -8,25 +8,19 @@ import { Feed } from "@/types";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 
-function deleteFeed(feedId: string) {
-  fetch(`/api/feeds/${feedId}`, {
-    method: "DELETE",
-  }).then(() => {
-    window.location.reload();
-  });
-}
-
 export default function Edit() {
   const [feed, setFeed] = useState<Feed | null>(null);
   const [isDirty, setIsDirty] = useState(false);
   const [shouldReload, setShouldReload] = useState(false);
   const [isFeedEditorOpen, setIsFeedEditorOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const { feeds, isLoading, error } = useFeeds();
+  const [refreshCounter, setRefreshCounter] = useState(0);
+  const { feeds, isLoading, error } = useFeeds({ refreshCounter });
+  const refresh = () => setRefreshCounter((counter) => counter + 1);
 
   useEffect(() => {
     if (shouldReload) {
-      window.location.reload();
+      refresh();
     }
   }, [shouldReload]);
 
@@ -44,6 +38,14 @@ export default function Edit() {
       window.removeEventListener("beforeunload", handleUnload);
     };
   }, [isDirty]);
+
+  function deleteFeed(feedId: string) {
+    fetch(`/api/feeds/${feedId}`, {
+      method: "DELETE",
+    }).then(() => {
+      refresh();
+    });
+  }
 
   if (isLoading) {
     return (
@@ -147,6 +149,8 @@ export default function Edit() {
             onSaved={() => {
               setIsDirty(false);
               setShouldReload(true);
+              setIsFeedEditorOpen(false);
+              refresh();
             }}
           />
         )}

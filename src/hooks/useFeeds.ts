@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Feed } from "@/types";
 import { useApi } from "./useApi";
 
-export function useFeeds() {
+export function useFeeds(
+  { refreshCounter }: { refreshCounter: number } = { refreshCounter: 0 },
+) {
   const [feeds, setFeeds] = useState<Feed[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -14,7 +16,7 @@ export function useFeeds() {
       setIsLoading,
       setError,
     },
-    [],
+    [refreshCounter],
   );
   return {
     feeds,
