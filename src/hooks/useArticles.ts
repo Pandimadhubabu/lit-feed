@@ -3,23 +3,16 @@ import { useState } from "react";
 import { useApi } from "./useApi";
 
 export function useArticles({ feedId }: { feedId?: string }) {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  useApi(
+  const { data, setData, isLoading, error } = useApi(
     {
       path: `/api/feeds/${feedId}/articles`,
-      setData: setArticles,
-      setIsLoading,
-      setError,
     },
     [feedId],
   );
 
   return {
-    articles,
-    setArticles,
+    articles: data as Article[],
+    setArticles: setData as (articles: Article[]) => void,
     isLoading,
     error,
   };

@@ -1,20 +1,30 @@
 import { useMemo, useState } from "react";
 
+// In-memory cache
+const cache: Record<string, { data: unknown; timestamp: number }> = {};
+
 export function useApi(
   arg: {
     path: string;
     options?: RequestInit;
-    setData: (data: any) => void;
-    setIsLoading: (isLoading: boolean) => void;
-    setError: (error: Error | null) => void;
   },
   monitor: any[],
 ) {
+  const [data, setData] = useState<any>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
   const [previousMonitoredValue, setPreviousMonitoredValue] = useState<
     any[] | undefined
   >(undefined);
-  const { path, options, setData, setIsLoading, setError } = arg;
+  const { path, options } = arg;
+
+  const setDataAndUpdateCache = (data: any) => {
+    setData(data);
+    cache[JSON.stringify({ path, options })] = { data, timestamp: Date.now() };
+  };
   useMemo(() => {
+    const cacheKey = JSON.stringify({ path, options });
+
     if (
       previousMonitoredValue &&
       areArraysExactlyTheSame(previousMonitoredValue, monitor)
@@ -23,6 +33,17 @@ export function useApi(
       return;
     }
     setPreviousMonitoredValue(monitor);
+    // Check if the response is in the cache
+    if (cache[cacheKey]) {
+      const { data, timestamp } = cache[cacheKey];
+      const isCacheValid = Date.now() - timestamp < 30 * 60 * 1000; // 30 minutes
+
+      if (isCacheValid) {
+        setData(data);
+        setIsLoading(false);
+        return;
+      }
+    }
     fetch(path, {
       ...options,
       headers: {
@@ -43,14 +64,26 @@ export function useApi(
       .then((response) => response.json())
       .then((result) => {
         const { data, message } = result;
-        setData(data);
+        setDataAndUpdateCache(data);
         setIsLoading(false);
+
+        // Store the response in the cache
+        cache[cacheKey] = { data, timestamp: Date.now() };
       })
       .catch((error) => {
         setError(error);
         setIsLoading(false);
       });
   }, [path, ...monitor]);
+
+  return {
+    data,
+    setData: setDataAndUpdateCache,
+    isLoading,
+    setIsLoading,
+    error,
+    setError,
+  };
 }
 
 function areArraysExactlyTheSame<T>(a: T[], b: T[]) {
