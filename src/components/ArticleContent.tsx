@@ -1,4 +1,5 @@
 import { Article } from "@/types";
+import Link from "next/link";
 
 export default function ArticleContent(selectedArticle: Article) {
   return (
@@ -9,7 +10,9 @@ export default function ArticleContent(selectedArticle: Article) {
       <p className="text-sm text-gray-500 dark:text-gray-400">
         Published on{" "}
         <span className="text-gray-900 dark:text-white">
-          {selectedArticle.feedName}
+          <Link href={`/feeds/${selectedArticle.feedId}`}>
+            {selectedArticle.feedName}
+          </Link>
         </span>
         {!!selectedArticle.date && (
           <time dateTime={selectedArticle.date} className="ml-2">
