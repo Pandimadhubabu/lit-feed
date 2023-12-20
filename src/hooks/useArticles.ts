@@ -2,8 +2,13 @@ import { Article } from "@/types";
 import { useState } from "react";
 import { useApi } from "./useApi";
 
-export function useArticles({ feedId }: { feedId?: string }) {
-  const { data, setData, isLoading, error } = useApi(
+export function useArticles({ feedId }: { feedId: string }) {
+  const {
+    data: articles,
+    setData: setArticles,
+    isLoading,
+    error,
+  } = useApi<Article[]>(
     {
       path: `/api/feeds/${feedId}/articles`,
     },
@@ -11,8 +16,8 @@ export function useArticles({ feedId }: { feedId?: string }) {
   );
 
   return {
-    articles: data as Article[],
-    setArticles: setData as (articles: Article[]) => void,
+    articles,
+    setArticles,
     isLoading,
     error,
   };

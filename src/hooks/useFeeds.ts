@@ -5,15 +5,20 @@ import { useApi } from "./useApi";
 export function useFeeds(
   { refreshCounter }: { refreshCounter: number } = { refreshCounter: 0 },
 ) {
-  const { setData, data, isLoading, error } = useApi(
+  const {
+    setData: setFeeds,
+    data: feeds,
+    isLoading,
+    error,
+  } = useApi<Feed[]>(
     {
       path: "/api/feeds",
     },
     [refreshCounter],
   );
   return {
-    feeds: data as Feed[],
-    setFeeds: setData as (feeds: Feed[]) => void,
+    feeds,
+    setFeeds,
     isLoading,
     error,
   };

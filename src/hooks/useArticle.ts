@@ -3,7 +3,12 @@ import { Article } from "@/types";
 import { useApi } from "./useApi";
 
 export function useArticle({ articleId }: { articleId: string }) {
-  const { data, setData, isLoading, error } = useApi(
+  const {
+    data: article,
+    setData: setArticle,
+    isLoading,
+    error,
+  } = useApi<Article>(
     {
       path: `/api/articles/${articleId}`,
     },
@@ -11,8 +16,8 @@ export function useArticle({ articleId }: { articleId: string }) {
   );
 
   return {
-    article: data as Article,
-    setArticle: setData as (article: Article) => void,
+    article,
+    setArticle,
     isLoading,
     error,
   };

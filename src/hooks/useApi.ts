@@ -1,24 +1,33 @@
 import { useMemo, useState } from "react";
 
-// In-memory cache
-const cache: Record<string, { data: unknown; timestamp: number }> = {};
+type DataType = Record<string, unknown> | unknown[] | unknown;
 
-export function useApi(
+// In-memory cache
+const cache: Record<string, { data: DataType; timestamp: number }> = {};
+
+type MonitoredValue =
+  | Record<string | symbol, never>
+  | string
+  | number
+  | boolean
+  | MonitoredValue[];
+
+export function useApi<T extends DataType>(
   arg: {
     path: string;
     options?: RequestInit;
   },
-  monitor: any[],
+  monitor: MonitoredValue[],
 ) {
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<T>();
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<Error>();
   const [previousMonitoredValue, setPreviousMonitoredValue] = useState<
-    any[] | undefined
+    MonitoredValue[] | undefined
   >(undefined);
   const { path, options } = arg;
 
-  const setDataAndUpdateCache = (data: any) => {
+  const setDataAndUpdateCache = (data: T) => {
     setData(data);
     cache[JSON.stringify({ path, options })] = { data, timestamp: Date.now() };
   };
@@ -39,7 +48,7 @@ export function useApi(
       const isCacheValid = Date.now() - timestamp < 30 * 60 * 1000; // 30 minutes
 
       if (isCacheValid) {
-        setData(data);
+        setData(data as T);
         setIsLoading(false);
         return;
       }

@@ -28,6 +28,7 @@ export function Sidebar() {
   useEffect(() => {
     setSelectedNavigation(navigation.findIndex((item) => item.link === path));
 
+    if (!feeds) return;
     setSelectedFeed(feeds.findIndex((feed) => getFeedLink(feed) === path));
   }, [feeds, path]);
 
@@ -133,7 +134,7 @@ export function Sidebar() {
               </Link>
             </div>
             <ul role="list" className="-mx-2 mt-2 space-y-1">
-              {isFeedLoading
+              {isFeedLoading || !feeds
                 ? [0, 1, 2].map((index) => (
                     <li
                       key={index}
